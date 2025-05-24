@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://www.google.com" target="blank">
+        <button disabled>CLICK</button>
+    </a>
+    <br>
+    <a href="http://www.google.com" target="blank">
+        <button style="background-color: aqua; color:red; border-radius:20px">CLICK</button>
+    </a>
+    <br>
+    <a onclick="doSomething()" href="http://www.google.com" target="blank">
+        <button style="background-color: rgb(215, 238, 12); color:rgb(28, 4, 247); border-radius:20px">CLICK</button>
+        
+        <p id="test"; align="center"><big>Hello</big></p>
+
+        <script>
+            function doSomething(){
+                document.getElementById("test").innerHTML="Goodbye";
+            }
+        </script>
+
+    </a>
+
+</body>
+</html>

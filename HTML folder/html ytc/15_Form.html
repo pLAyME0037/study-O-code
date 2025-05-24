@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document 15</title>
+    <style>
+      div {
+        border: 2px solid greenyellow;
+        padding: 15px;
+      }
+      .pInfo {
+        border: 3px solid rgb(31, 10, 221);
+        padding: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="action_page.php" method="post">
+      <fieldset class="pInfo">
+        <legend>Presonal Information</legend>
+        <div>
+          <label for="fname">Firstname:</label>
+          <input type="text" id="fname" name="fname" placeholder="Sara" required/>
+        </div>
+        <br />
+        <div>
+          <label for="fname">Lastname:</label>
+          <input type="text" id="fname" name="fname" placeholder="fan" required/>
+        </div>
+        <br />
+        <div>
+          <label for="pass">Password:</label>
+          <input type="password" id="pass" name="pass" placeholder="23456789" maxlength="12" required/>
+        </div>
+        <br />
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="fan123@gmail.com" required/>
+        </div>
+        <br />
+        <div>
+          <label for="phone">Phone:</label>
+          <input type="tel" id="phone" name="phone" placeholder="+855749557544" required/>
+        </div>
+        <br />
+        <div>
+          <label for="bdate">Born:</label>
+          <input type="date" id="bdate" name="bdate" />
+        </div>
+        <br />
+        <div>
+          <label for="datelocal">Born:</label>
+          <input type="datetime-local" id="datelocal" name="datelocal" />
+        </div>
+        <br />
+        <div>
+          <label for="title">Title:</label>
+
+          <label for="Mr.">Mr.</label>
+          <input type="radio" name="title" id="Mr." value="Mr." />
+
+          <label for="Mrs.">Mrs.</label>
+          <input type="radio" name="title" id="Mrs." value="Mrs." />
+
+          <label for="PhD.">PhD.</label>
+          <input type="radio" name="title" id="PhD." value="PhD." />
+        </div>
+        
+      </fieldset>
+        <br />
+      <div>
+        <label for="search">search</label>
+        <input type="search" />
+      </div>
+        <br />
+      <div>
+        <label for="quantity">Qty:</label>
+        <input type="number" id="quantity" name="quantity" min="0" max="1000" value="1"/>
+      </div>
+      <br />
+      <div>
+        <label for="color">color</label>
+        <input type="color" id="color" name="color" />
+      </div>
+      <br />
+      <div>
+        <label for="payment">Payment</label>
+        <select name="payment" id="payment">
+          <option name="visa" id="" value="visa">visa</option>
+          <option name="giftcard" id="" value="giftcard">giftcard</option>
+          <option name="mastercard" id="" value="mastercard">mastercard</option>
+        </select>
+      </div>
+      <br />
+      <div>
+        <label for="check">Checkbox</label>
+        <input type="checkbox" name="check" id="check" />
+        <br />
+        <label for="pick">Pick Me</label>
+        <input type="checkbox" name="pick" id="pick" />
+      </div>
+      <br />
+      <div>
+        <label for="textarea">abc</label>
+        <textarea name="textarea" id="textarea" cols="80" rows="10">
+          <div>
+          <label for="textarea">abc</label>
+          <textarea name="textarea" id="textarea" cols="80" rows="5">
+          </div>
+        </textarea>
+      </div>
+      <div>
+        <input type="reset" />
+      </div>
+      <br />
+      <div>
+        <input type="submit" />
+      </div>
+    </form>
+  </body>
+</html>

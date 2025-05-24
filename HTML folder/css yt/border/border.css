@@ -1,0 +1,17 @@
+h1{
+    border-top-style: solid;
+    border-top-color: aqua;
+    border-bottom-style: solid;
+    border-bottom-width: 20px;
+    border-right-style: dotted;
+    border-left-style: dashed;
+    text-align: center;
+}
+p{
+    border-style: dashed;
+    border-width: 5px;
+    border-color: tomato;
+    border-radius: 20px;
+
+    padding: 5px;
+}

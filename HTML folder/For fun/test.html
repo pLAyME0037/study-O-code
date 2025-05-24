@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Functional Keyboard</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f9;
+      }
+      .keyboard {
+        display: grid;
+        grid-template-columns: repeat(10, 50px);
+        gap: 2px;
+        margin-top: 30px;
+      }
+      .key {
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .key:hover {
+        background-color: #c0c0c0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="keyboard">
+      <!-- Numeric Row -->
+      <button class="key" onclick="type('1')">1</button>
+      <button class="key" onclick="type('2')">2</button>
+      <button class="key" onclick="type('3')">3</button>
+      <button class="key" onclick="type('4')">4</button>
+      <button class="key" onclick="type('5')">5</button>
+      <button class="key" onclick="type('6')">6</button>
+      <button class="key" onclick="type('7')">7</button>
+      <button class="key" onclick="type('8')">8</button>
+      <button class="key" onclick="type('9')">9</button>
+      <button class="key" onclick="type('0')">0</button>
+
+      <!-- Function Keys -->
+      <button class="key" onclick="type('Q')">Q</button>
+      <button class="key" onclick="type('W')">W</button>
+      <button class="key" onclick="type('E')">E</button>
+      <button class="key" onclick="type('R')">R</button>
+      <button class="key" onclick="type('T')">T</button>
+      <button class="key" onclick="type('Y')">Y</button>
+      <button class="key" onclick="type('U')">U</button>
+      <button class="key" onclick="type('I')">I</button>
+      <button class="key" onclick="type('O')">O</button>
+      <button class="key" onclick="type('P')">P</button>
+
+      <!-- More Function Keys -->
+      <button class="key" onclick="type('A')">A</button>
+      <button class="key" onclick="type('S')">S</button>
+      <button class="key" onclick="type('D')">D</button>
+      <button class="key" onclick="type('F')">F</button>
+      <button class="key" onclick="type('G')">G</button>
+      <button class="key" onclick="type('H')">H</button>
+      <button class="key" onclick="type('J')">J</button>
+      <button class="key" onclick="type('K')">K</button>
+      <button class="key" onclick="type('L')">L</button>
+
+      <!-- Function Keys -->
+      <button class="key" onclick="type('Z')">Z</button>
+      <button class="key" onclick="type('X')">X</button>
+      <button class="key" onclick="type('C')">C</button>
+      <button class="key" onclick="type('V')">V</button>
+      <button class="key" onclick="type('B')">B</button>
+      <button class="key" onclick="type('N')">N</button>
+      <button class="key" onclick="type('M')">M</button>
+
+      <!-- Special Keys -->
+      <button class="key" onclick="type('!')">!</button>
+      <button class="key" onclick="type('@')">@</button>
+      <button class="key" onclick="type('#')">#</button>
+      <button class="key" onclick="type('$')">$</button>
+    </div>
+
+    <script>
+      function type(text) {
+        // You can use this to input text into an existing textarea or input field
+        console.log("Typed: " + text);
+        document.getElementById("inputField").value += text;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background: linear-gradient(rgb(119, 0, 255), white, skyblue);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+      }
+      .container {
+        display: flex;
+        justify-content: space-evenly;
+        margin: auto;
+        margin-top: 20px;
+      }
+      .card {
+        background-color: bisque;
+        box-shadow: 3px 3px 5px skyblue, 5px 5px 5px white;
+        width: 200px;
+        height: 200px;
+        border: 3px solid purple;
+        margin: 0 -25%;
+      }
+      .pic {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+      .sun {
+        width: 200px;
+        height: 200px;
+        object-fit: fill;
+      }
+      .circle {
+        background-color: orangered;
+        margin: -650px 1200px;
+        box-shadow: 5px 5px 5px white;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 3px solid purple;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <img class="pic" src="images\photo_7_2024-12-23_22-26-29.jpg" alt="" />
+      </div>
+    </div>
+    <div class="container">
+      <div class="card">
+        <img
+          class="pic"
+          src="images\photo_1_2024-12-23_22-26-29.jpg"
+          alt="pic"
+        />
+      </div>
+      <div class="card"><img class="pic" src="images\logo.jpg" alt="" /></div>
+      <div class="card">
+        <img class="pic" src="images\photo_8_2024-12-23_22-26-29.jpg" alt="" />
+      </div>
+    </div>
+    <div class="container">
+      <div class="card">
+        <img class="pic" src="images\photo_5_2024-12-23_22-26-29.jpg" alt="" />
+      </div>
+    </div>
+    <div class="circle">
+      <img
+        class="sun"
+        src="images\pngtree-beautifull-sunset-png-image_6124099.png"
+        alt=""
+      />
+    </div>
+  </body>
+</html>

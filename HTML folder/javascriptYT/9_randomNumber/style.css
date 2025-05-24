@@ -1,0 +1,16 @@
+body{
+    background-color: rgba(0, 0, 0, 0.85);
+    color: aliceblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1rem;
+    text-align: center;
+}
+#rollBtn{
+    font-size: 3rem;
+    padding: 5px 25px;
+    border-radius: 5px;
+    background-color: hotpink;
+}
+.rollLb{
+    font-size: 3rem;
+}
