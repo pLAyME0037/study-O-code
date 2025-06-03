@@ -25,23 +25,22 @@ public class n_Recursion {
     
     
     private static void walk(int step) {
-        // for (int i = 0; i < step; i++) {
-            // System.out.println("you walk " + step + " steps.");
-            // }
+    // for (int i = 0; i < step; i++) {
+        // System.out.println("you walk " + step + " steps.");
+        // }
             
-            if (step < 1) return;
-            System.out.println("you walk " + step + " steps.");
-            walk(step - 1); // recursive case
-        }
-        
-        private static int factorial(int num) {
-            
-            if (num < 1) return 1;
-            return num * factorial(num - 1);
-        }
-
-        private static int power(int base, int exponent) {
-            if (exponent < 1) return 1;
-            return base * power(base, exponent - 1);
-        }
+        if (step < 1) return;
+        System.out.println("you walk " + step + " steps.");
+        walk(step - 1); // recursive case
     }
+        
+    private static int factorial(int num) {
+        
+        if (num < 1) return 1;
+        return num * factorial(num - 1);
+    }
+    private static int power(int base, int exponent) {
+        if (exponent < 1) return 1;
+        return base * power(base, exponent - 1);
+    }
+}

@@ -6,7 +6,7 @@ int main(int argc, char** argv)
 	cout << "Enter n:";
 	cin >> n;
 	cout << "Enter m:";
-	cin> > m;
+	cin >> m;
 	
 	string array[n][m];
 	for(int i = 0; i < n; i++){
@@ -18,8 +18,9 @@ int main(int argc, char** argv)
 	cout << "\n";
 	for(int i = 0 ; i < n ; i++){
 		for(int j = 0; j < m; j++){
-		cout << "array["<< i <<"][" << j << "]=" << array[i][j] << endl;
-		}
+		cout << array[i][j] << " ";
+	}
+	cout << "\n";
 	}
 	return 0;
 }
