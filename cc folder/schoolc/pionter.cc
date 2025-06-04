@@ -3,9 +3,10 @@
 int main()
 {
     int a = 255;
-    int * aa = &a;
+    // int* : pointer | & : address
+    int* A = &a;
 
-    std::cout << *aa << "\n" << &a;
+    std::cout << *A << "\n" << &a;
 
     return 0;
 }

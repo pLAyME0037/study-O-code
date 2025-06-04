@@ -9,6 +9,7 @@ int main(int argc, char** argv)
 	cin >> m;
 	
 	string array[n][m];
+	
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < m; j++){
 		cout << "array[" << i << "][" << j << "]=";

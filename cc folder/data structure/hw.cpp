@@ -17,8 +17,8 @@ int main() {
             if (i % 2 != 0) productOfOdds *= i;
             else productOfEvens *= i;
 
-            result = productOfOdds * productOfEvens;
             std::cout << productOfOdds << ", " << productOfEvens << "\n";
+            result = productOfOdds * productOfEvens;
         }
         std::cout<< "The result " << n << "! is " << result << "\n";
     }

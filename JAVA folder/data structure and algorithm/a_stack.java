@@ -32,7 +32,7 @@ public class a_stack{
 
         System.out.println(stack.peek()); // see the bottom stack, but [will not] remove form stack.
 
-        System.out.println( stack.search("Minecraft")); // search for stack item ID.
+        System.out.println(stack.search("Minecraft")); // search for stack item ID.
 
         // It possible to run out of memory when add items to a stack.
         // for(int i = 0; i < 1000000000; i++){
