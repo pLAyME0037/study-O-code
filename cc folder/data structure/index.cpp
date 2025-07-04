@@ -3,14 +3,29 @@
 using namespace std;
 
 int main(){
-    int n = 3;
-    int cal[n];
-    int arr[] = {3, 4, 5};
-    int arrr[] = {9, 3, 8};
 
-    for(int i = 0; i < n; i++){
-        cal[i] = arr[i] + arrr[i];
-        cout << cal[i] << ", ";
+    int array[] = {3, 1, 2};
+    int n = 3;
+    int min = array[0];
+    for (int i = 0; i < n; i++) {
+        if (min > array[i]) {
+            min = array[i];
+        }
     }
+    cout << "Min: " << min << "\n";
+
     return 0;
+
+    // int array[] = {3, 1, 2};
+    // int n = sizeof(array) / sizeof(array[0]);
+    // int min = array[0];
+
+    // for (int i = 0; i < n; i++) {
+    //     if (min > array[i]) {
+    //         min = array[i];
+    //     }
+    // }
+    // cout << "Min: " << min << "\n";
+
+    // return 0;
 }
