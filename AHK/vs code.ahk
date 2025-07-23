@@ -1,47 +1,97 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 ;--------------------------------------
-    ; $h::Send("{Left}")
-    ; $j::Send("{Down}")
-    ; $k::Send("{Up}")
-    ; $l::Send("{Right}")
+#w:: Run "C:\Users\USER\AppData\Local\Programs\Microsoft VS Code\Code.exe"
 ;--------------------------------------
-
-; #1::Run "E:\\Program Files\\Everything 1.5a\\Everything64.exe"
-
-;--------------------------------------
-
+; Auto-disable nvim-like shortcuts when Vim or Neovim window is active
+; --- Mode Handling ---
 global bindingMode := false
 
-!h:: {
+; Toggle bindingMode (normal/insert mode) with Alt+I
+!i:: {
     global bindingMode
-
-    bindingMode := !bindingMode ; Invert the value (true -> false, false -> true)
-    ToolTip("Binding Mode: " . (bindingMode ? "ON" : "OFF"))
-    SetTimer(ToolTip, -2000) ; Optional: Hide the tooltip after 2 seconds
+    bindingMode := !bindingMode
+    ToolTip("Mode: " . (bindingMode ? "NORMAL" : "INSERT"))
+    SetTimer(() => ToolTip(), -2000)
 }
 
-; Esc:: {
-;     global bindingMode
+; Only enable bindings if bindingMode is ON and not in Vim/Neovim windows
+#HotIf bindingMode && !WinActive("ahk_exe vim.exe") && !WinActive("ahk_exe nvim-qt.exe") && !WinActive("ahk_exe nvim.exe")
 
-;     if (bindingMode) { ; Only turn off if it's currently on
-;         bindingMode := false
-;         ToolTip("Binding Mode: OFF")
-;         SetTimer(ToolTip, -2000) ; Optional: Hide the tooltip after 2 seconds
-;     }
-;     ToolTip("") ; Immediately hide any active tooltip
-; }
+; --- Basic Navigation ---
+$h:: Send("{Left}")
+$j:: Send("{Down}")
+$k:: Send("{Up}")
+$l:: Send("{Right}")
 
-#HotIf bindingMode
+; --- Word Navigation ---
+$w:: Send("^{Right}")             ; Next word
+$b:: Send("^{Left}")              ; Previous word
+$e:: Send("^{Right}{Ctrl up}")    ; End of word (approximate)
 
-    $h::Send("{Left}")
-    $j::Send("{Down}")
-    $k::Send("{Up}")
-    $l::Send("{Right}")
+; --- Line Navigation ---
+$0:: Send("{Home}")               ; Line start
+$^:: Send("{Home}")               ; Line start (caret)
+$$:: Send("{End}")                ; Line end
 
-    $+h::Send("{Ctrl down}{Shift down}{Left}{Shift up}{Ctrl up}")
-    $+l::Send("{Ctrl down}{Shift down}{Right}{Shift up}{Ctrl up}")
-    $+i::Send("{Home}")
-    $+a::Send("{End}")
+; --- Undo/Redo ---
+$u:: Send("^z")                   ; Undo
+$^r:: Send("^y")                  ; Redo
+
+; --- Editing ---
+$x:: Send("{Del}")                ; Delete character under cursor
+::dd:: Send("^{l}")               ; Delete line
+::yy:: Send("^{c}")               ; Copy line
+$p:: Send("^{v}")                 ; Paste
+
+; --- File Navigation ---
+::gg:: Send("^{Home}")            ; File start
+$+G:: Send("^{End}")              ; File end
+
+; --- Search Navigation ---
+$n:: Send("{F3}")                 ; Next search result
+$+N:: Send("+{F3}")               ; Previous search result
+
+; --- Word Editing ---
+::dw:: Send("+^{Right}{Del}")     ; Delete word
+::ciw:: Send("+^{Right}{Del}")    ; Change inner word
+
+; --- Insert/Append Modes ---
+$i:: {
+    Send("{Left}")                ; Insert after cursor
+    Send("!i")
+}
+$a:: {
+    Send("{Right}")               ; Append after cursor
+    Send("!i")
+}
+$+I:: {
+    Send("{Home}")                ; Insert at line start
+    Send("!i")
+}
+$+A:: {
+    Send("{End}")                 ; Append at line end
+    Send("!i")
+}
+
+
+$o:: {
+    Send("{End}{Enter}")         ; Open new line below (simulate 'o')
+    Send("!i")
+}
+$+O:: {
+    Send("{Home}{Enter}{Up}")    ; Open new line above (simulate 'O')
+    Send("!i")
+}
+::cc:: {
+    Send("^{l}")                 ; Change line (delete line, enter insert mode)
+    Send("!i")
+}
+$+J:: Send("+{Down}{End}{Space}")  ; Join lines (select next line, join)
+$>>:: Send("^]")                  ; Indent line (Ctrl+])
+$<<:: Send("^[")                  ; Outdent line (Ctrl+[)
+$V:: Send("+{End}")               ; Visual line mode (select to end of line)
+^p:: Send("^p")                   ; Fuzzy file finder (Ctrl+P in VSCode)
+^+f:: Send("^+f")                 ; Search in files (Ctrl+Shift+F)
 
 #HotIf

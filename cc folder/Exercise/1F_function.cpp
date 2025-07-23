@@ -1,6 +1,6 @@
 #include <iostream>
 
-using namespace std;
+using namespace std; 
 
 void customer(string id, string name, char gender, string place, const char* phNum){
     cout << "==================================================Customers=====================================================\n";
