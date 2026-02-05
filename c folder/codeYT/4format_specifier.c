@@ -1,5 +1,6 @@
 #include <stdio.h>
-int main(){
+int main()
+{
 
     /*format specifier % = defines and format a type of data in the displayed
 

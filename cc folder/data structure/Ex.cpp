@@ -1,31 +1,20 @@
 #include <iostream>
-#include <stack>
+
 using namespace std;
 int main(int argc, char **argv)
 {
-	int n;
-	cout << "Input n:";
-	cin >> n;
-	int arr[n];
-	for (int i = 0; i < n; i++)
+	// [2] is row size, [3] is column size
+	float twoDarray[2][3] = {
+		{1, 2.2, 3.3},
+		{4.4, 5.5, 6.6},
+		
+	};
+	for (int i = 0; i < 2; i++)
 	{
-		cout << "arr[" << i << "]:";
-		cin >> arr[i];
-	}
-	cout << "\n";
-	for (int i = 0; i < n; i++)
-	{
-		cout << "arr[" << i << "]:" << arr[i] << endl;
-	}
-	cout << "\n";
-	for (int i = 0; i < n; i++)
-	{
-		cout << "arr[" << i << "]:" << &arr[i] << endl;
-	}
-	cout << "\n";
-	for (int i = 0; i < n - 1; i++)
-	{
-		cout << "arr[" << i << "]:" << arr[i] << endl;
+		for (int j = 0; j < 3; j++)
+		{
+			cout << "2D array[" << i << "][" << j << "]:" << &twoDarray[i][j] << endl;
+		}
 	}
 
 	return 0;

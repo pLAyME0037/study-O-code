@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class d_LinkedList {
     public static void main(String[] args) {
-        
+
         LinkedList<String> linkedList = new LinkedList<String>();
 
         // F -> A order.
