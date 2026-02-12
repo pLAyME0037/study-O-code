@@ -1,28 +1,37 @@
 #include <stdio.h>
 #include <string.h>
 
-struct Player
-{
+struct Player {
     char name[12];
     int score;
 };
 
-int main()
-{
-    struct Player player1;
-    struct Player player2;
+typedef struct User {
+    char a[10];
+    bool b;
+} UserTS;
 
-    strcpy(player1.name, "apple");
-    player1.score= 4;
+int main() {
+    /* struct Player player1; */
+    /* struct Player player2; */
+    /**/
+    /* strcpy(player1.name, "apple"); */
+    /* player1.score= 4; */
+    /**/
+    /* strcpy(player2.name, "banana"); */
+    /* player2.score= 2; */
+    /**/
+    /* printf("%s\n", player1.name); */
+    /* printf("%d\n", player1.score); */
+    /**/
+    /* printf("%s\n", player2.name); */
+    /* printf("%d\n", player2.score); */
 
-    strcpy(player2.name, "banana");
-    player2.score= 2;
+    UserTS A1;
+    strcpy(A1.a, "hello");
+    A1.b = true;
 
-    printf("%s\n", player1.name);
-    printf("%d\n", player1.score);
-
-    printf("%s\n", player2.name);
-    printf("%d\n", player2.score);
-
+    printf("%s\n", A1.a);
+    /* printf("%s\n", A1.b); */
     return 0;
 }

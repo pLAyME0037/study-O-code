@@ -1,5 +1,6 @@
 #include <stdio.h>
-int main(){
+
+int main() {
 
     int x = 10;
     //x = x % 2;
