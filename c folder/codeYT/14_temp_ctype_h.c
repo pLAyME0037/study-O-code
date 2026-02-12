@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
-int main()
-{
+
+int main() {
     char unit;
     float temp;
 
@@ -12,21 +12,21 @@ int main()
 
     if (unit == 'C'){
 
-    printf("\nEnter the temperatuer in C:");
-    scanf("%f", &temp);
+        printf("\nEnter the temperatuer in C:");
+        scanf("%f", &temp);
 
-    temp = (temp * 9 / 5) + 32;
+        temp = (temp * 9 / 5) + 32;
 
-    printf("\nThe temperature in Farenheit is:%f", temp);
+        printf("\nThe temperature in Farenheit is:%f", temp);
     }
     else if (unit == 'F'){
 
-    printf("\nEnter the temperatuer in F:");
-    scanf("%f", &temp);
+        printf("\nEnter the temperatuer in F:");
+        scanf("%f", &temp);
 
-    temp = ((temp - 32)*5)/9;
+        temp = ((temp - 32)*5)/9;
 
-    printf("\nThe temperature in Celsius is:%f", temp);
+        printf("\nThe temperature in Celsius is:%f", temp);
     }
     return 0;
 }
