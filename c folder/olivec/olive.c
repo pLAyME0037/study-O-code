@@ -58,4 +58,34 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
     }
 }
 
+/**
+ * @param pixels A pointer to the memory buffer representing screen/image
+ * @param pixels_width The total number of horizontal pixels in image
+ * @param pixels_heigth	The total number of vertical pixels in image
+ * @param cx, cy Center X and Y coords where the circle's middle sits 
+ * @param r Radius 
+ * @param color hex color value to fill the circle
+ */
+void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_heigth,
+                        int cx, int cy, int r,
+                        uint32_t color) {
+    int x1 = cx - r; // Left Edge
+    int x2 = cx + r; // Right Edge
+    int y1 = cy - r; // Top Edge
+    int y2 = cy + r; // Bottom Edge
+    for (int y = y1; y <= y2; ++y) {
+        if (0 <= y && y < (int) pixels_heigth) {
+            for (int x = x1; x <= x2; ++x) {
+                if (0 <= x && x < (int) pixels_width) {
+                    int dx = x - cx;
+                    int dy = y - cy;
+                    if (dx*dx + dy*dy <= r*r) {
+                        pixels[y*pixels_width + x] = color;
+                    }
+                }
+            }
+        }
+    }
+}
+
 #endif /* ifdef OLIVE_C_ */
