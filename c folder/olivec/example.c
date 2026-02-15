@@ -20,6 +20,10 @@
 
 static uint32_t pixels[WIDTH*HEIGHT];
 
+float lerpf(float a, float b, float t) {
+    return a + (b - a) * t;
+}
+
 bool checkerEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
@@ -49,12 +53,17 @@ bool circleEx(void) {
 
     for (int x = 0; x < COLS; ++x) {
         for (int y = 0; y < ROWS; ++y) {
+            float u = (float) x/COLS;
+            float v = (float) y/ROWS;
+            float t = (float) (u + v)/2;
+
             size_t radius = CELL_WIDTH;
             if (CELL_HEIGHT < radius) radius = CELL_HEIGHT;
             int cx = x*CELL_WIDTH + CELL_WIDTH/2;
             int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
             olivec_fill_circle(pixels, WIDTH, HEIGHT,
-                               cx, cy, radius/2,
+                               cx, cy, 
+                               (size_t) lerpf(radius/4, radius/2, t),
                                FOREGROUNG_COLOR);
         }
     }

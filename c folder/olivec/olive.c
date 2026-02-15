@@ -43,8 +43,8 @@ defer:
 }
 
 void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
-        int x0, int y0, size_t w, size_t h,
-        uint32_t color) {
+                      int x0, int y0, size_t w, size_t h,
+                      uint32_t color) {
     for (int dy = 0; dy < (int) h; ++dy) {
         int y = y0 + dy;
         if (0 <= y && y < (int) pixels_height) {
@@ -59,7 +59,7 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
 }
 
 /**
- * @param pixels A pointer to the memory buffer representing screen/image
+ * @param pixels A pointer to the memory buffer representing image
  * @param pixels_width The total number of horizontal pixels in image
  * @param pixels_heigth	The total number of vertical pixels in image
  * @param cx, cy Center X and Y coords where the circle's middle sits 
