@@ -3,6 +3,16 @@
 #ifndef OLIVE_C_
 #define OLIVE_C_
 
+void swap_int(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+float lerpf(float a, float b, float t) {
+    return a + (b - a) * t;
+}
+
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
     for (size_t i = 0; i < width*height; ++i) {

@@ -20,16 +20,6 @@
 
 static uint32_t pixels[WIDTH*HEIGHT];
 
-void swap_int(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-
-float lerpf(float a, float b, float t) {
-    return a + (b - a) * t;
-}
-
 bool lineEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
