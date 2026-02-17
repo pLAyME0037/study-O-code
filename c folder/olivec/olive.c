@@ -1,3 +1,5 @@
+/* i learn this form Tsoding Daily */
+
 #ifndef OLIVE_C_
 #define OLIVE_C_
 
