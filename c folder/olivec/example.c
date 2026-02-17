@@ -16,12 +16,97 @@
 #define CELL_HEIGHT (HEIGHT/ROWS)
 
 #define BACKGROUND_COLOR 0xFF202020
-#define FOREGROUNG_COLOR 0x6495EDFF
+#define FOREGROUND_COLOR 0x6495EDFF
 
 static uint32_t pixels[WIDTH*HEIGHT];
 
+void swap_int(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
 float lerpf(float a, float b, float t) {
     return a + (b - a) * t;
+}
+
+void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
+                      int x1, int y1, int x2, int y2,
+                      uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    if (dx != 0) {
+        int c = y1 - ( dy*x1 )/dx;
+
+        if (x1 > x2) swap_int(&x1, &x2);
+        for (int x = x1; x <= x2; ++x) {
+            if (0 <= x && x <= (int) pixels_width) {
+                int sy1 = dy*x/dx + c;
+                int sy2 = dy*(x + 1)/dx + c;
+                if (sy1 > sy2) swap_int(&sy1, &sy2);
+                for (int y = sy1; y <= sy2; ++y) {
+                    if (0 <= y && y < (int) pixels_height) {
+                        pixels[y*pixels_width + x] = color;
+                    }
+                }
+            }
+        }
+    } else {
+        int x = x1;
+        if (0 <= x && x < (int) pixels_width) {
+            if (y1 > y2) swap_int(&y1, &y2);
+            for (int y = y1; y <= y2; ++y) {
+                if (0 <= y && y < (int) pixels_height) {
+                    pixels[y*pixels_width + x] = color;
+                }
+            }
+        }
+    }
+}
+
+bool lineEx(void) {
+    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     0, 0, WIDTH, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     0, 0, WIDTH/4, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     WIDTH, 0, 0, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     WIDTH/4, 0, 0, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     WIDTH, 0, WIDTH/4*3, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     WIDTH/4*3, 0, WIDTH, HEIGHT, 
+                     FOREGROUND_COLOR);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     0, HEIGHT/2, WIDTH, HEIGHT/2, 
+                     0xFF20FF20);
+
+    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+                     WIDTH/2, 0, WIDTH/2, HEIGHT,
+                     0xFFFF3030);
+
+    const char *file_path = "line_example.ppm";
+    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
+    if (err) {
+        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
+        return false;
+    }
+    return true;
 }
 
 bool checkerEx(void) {
@@ -63,8 +148,8 @@ bool circleEx(void) {
             int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
             olivec_fill_circle(pixels, WIDTH, HEIGHT,
                                cx, cy, 
-                               (size_t) lerpf(radius/4, radius/2, t),
-                               FOREGROUNG_COLOR);
+                               (size_t) lerpf(radius/8, radius/2, t),
+                               FOREGROUND_COLOR);
         }
     }
 
@@ -80,6 +165,7 @@ bool circleEx(void) {
 int main(void) {
     if (! checkerEx()) return -1;
     if (! circleEx()) return -1;
+    if (! lineEx()) return -1;
 
     return 0;
 }
