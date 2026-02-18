@@ -11,8 +11,11 @@ public class k_bubbleSort {
 
         bubbleSort(array);
 
-        for (int i : array) {
-            System.out.print(i);
+        for (int i = 0; i < array.length; ++i) {
+            System.out.print(array[i]);
+            if (i < array.length - 1) {
+                System.out.print(", ");
+            }
         }
     }
 
