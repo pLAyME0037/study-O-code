@@ -3,6 +3,33 @@
 #ifndef OLIVE_C_
 #define OLIVE_C_
 
+#include <stdint.h>
+#include <stddef.h>
+
+typedef int Errno;
+
+void swap_int(int *a, int *b);
+float lerpf(float a, float b, float t);
+void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color);
+void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
+                      int x0, int y0, size_t w, size_t h,
+                      uint32_t color);
+void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_heigth,
+                        int cx, int cy, int r,
+                        uint32_t color);
+void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
+                      int x1, int y1, int x2, int y2,
+                      uint32_t color);
+Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path);
+    
+#endif /* ifdef OLIVE_C_ */
+
+#ifdef OLIVE_IMPLEMENTATION
+#undef OLIVE_IMPLEMENTATION
+
+#include <stdio.h>
+#include <errno.h>
+
 void swap_int(int *a, int *b) {
     int t = *a;
     *a = *b;
@@ -19,8 +46,6 @@ void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) 
         pixels[i] = color;
     }
 }
-
-typedef int Errno;
 
 #define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
 
@@ -135,4 +160,4 @@ void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
     }
 }
 
-#endif /* ifdef OLIVE_C_ */
+#endif /* ifdef OLIVE_IMPLEMENTATION */

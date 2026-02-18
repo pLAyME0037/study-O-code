@@ -1,17 +1,18 @@
+#ifndef TEST_C_
+#define  TEST_C_
+
 #include <errno.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
-#include "olive.c"
 
 #define WIDTH 800
 #define HEIGHT 600
 
-#define COLS (8)
-#define ROWS (6)
+#define COLS (8*2)
+#define ROWS (6*2)
 #define CELL_WIDTH  (WIDTH/COLS)
 #define CELL_HEIGHT (HEIGHT/ROWS)
 
@@ -116,3 +117,5 @@ bool circleEx(void) {
     }
     return true;
 }
+
+#endif /* ifndef TEST_C_ #define  TEST_C_ */
