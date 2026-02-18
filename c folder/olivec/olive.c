@@ -8,6 +8,11 @@
 
 typedef int Errno;
 
+#define OLIVEC_SWAP(T, a, b) do { T t = a; a = b; b = t; } while (0)
+#define OLIVEC_LERPF(T, a, b) a + (b - a)*t
+#define OLIVEC_SIGN(T, x) ((T)((x) > 0) - (T)((x) < 0))
+#define OLIVEC_ABS(T, x) (OLIVEC_SIGN(T, x)*(x))
+
 void swap_int(int *a, int *b);
 float lerpf(float a, float b, float t);
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color);
