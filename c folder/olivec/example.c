@@ -1,17 +1,11 @@
-#include <errno.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include "olive.c"
+#include "test.c"
 
+#include "test.h"
 #define WIDTH 800
 #define HEIGHT 600
 
-#define COLS (8*2)
-#define ROWS (6*2)
+#define COLS (8)
+#define ROWS (6)
 #define CELL_WIDTH  (WIDTH/COLS)
 #define CELL_HEIGHT (HEIGHT/ROWS)
 
@@ -19,103 +13,6 @@
 #define FOREGROUND_COLOR 0x6495EDFF
 
 static uint32_t pixels[WIDTH*HEIGHT];
-
-bool lineEx(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, 0, WIDTH, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, 0, WIDTH/4, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH, 0, 0, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH/4, 0, 0, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH, 0, WIDTH/4*3, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH/4*3, 0, WIDTH, HEIGHT, 
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, HEIGHT/2, WIDTH, HEIGHT/2, 
-                     0xFF20FF20);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH/2, 0, WIDTH/2, HEIGHT,
-                     0xFFFF3030);
-
-    const char *file_path = "line_example.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
-}
-
-bool checkerEx(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
-
-    for (int x = 0; x < COLS; ++x) {
-        for (int y = 0; y < ROWS; ++y) {
-            uint32_t color = BACKGROUND_COLOR;
-            if ((x + y) % 2 == 0) {
-                color = 0xFF0000FF;
-            }
-            olivec_fill_rect(pixels, WIDTH, HEIGHT,
-                             x*CELL_WIDTH, y*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,
-                             color);
-        }
-    }
-
-    const char *file_path = "checker_example.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
-}
-
-bool circleEx(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
-
-    for (int x = 0; x < COLS; ++x) {
-        for (int y = 0; y < ROWS; ++y) {
-            float u = (float) x/COLS;
-            float v = (float) y/ROWS;
-            float t = (float) (u + v)/2;
-
-            size_t radius = CELL_WIDTH;
-            if (CELL_HEIGHT < radius) radius = CELL_HEIGHT;
-            int cx = x*CELL_WIDTH + CELL_WIDTH/2;
-            int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
-            olivec_fill_circle(pixels, WIDTH, HEIGHT,
-                               cx, cy, 
-                               (size_t) lerpf(radius/8, radius/2, t),
-                               FOREGROUND_COLOR);
-        }
-    }
-
-    const char *file_path = "circle.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
-}
 
 int main(void) {
     if (! checkerEx()) return -1;
