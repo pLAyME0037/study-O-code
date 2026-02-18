@@ -6,7 +6,8 @@ void sort_tri_point_by_y(int *x1, int *y1,
                          int *x2, int *y2,
                          int *x3, int *y3) {
     if (&y1 > & y2) {
-        OLIVEC_SWAP(int, &x1, &x2);
+        OLIVEC_SWAP(int, *x1, *x2);
+        OLIVEC_SWAP(int, *y1, *y2);
     }
 }
 void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height, 
