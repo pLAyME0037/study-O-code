@@ -23,7 +23,7 @@ void olivec_sort_tri_points_by_y(int *x1, int *y1,
 bool olivec_line_of_segment(int x1, int y1, int x2, int y2, int *k, int *c) {
     int dx = x2 - x1;
     int dy = y2 - y1;
-    
+
     if (dx == 0) return false;
 
     *k = dy/dx;
@@ -32,7 +32,7 @@ bool olivec_line_of_segment(int x1, int y1, int x2, int y2, int *k, int *c) {
     return true;
 }
 
-void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height, 
+void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
                           int x1, int y1,
                           int x2, int y2,
                           int x3, int y3,
@@ -66,16 +66,16 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
 bool fill_triangle(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
-    olivec_fill_circle(pixels, WIDTH, HEIGHT,
-                       CELL_WIDTH + CELL_WIDTH/2, CELL_HEIGHT + CELL_HEIGHT/2, 
-                       WIDTH,
-                       FOREGROUND_COLOR);
-    
-    /* void olivec_draw_triangle(pixels, WIDTH, HEIGHT,  */
-    /*                           int x1, int y1, */
-    /*                           int x2, int y2, */
-    /*                           int x3, int y3, */
-    /*                           uint32_t color); */
+    int radius = 5;
+    uint32_t color = FOREGROUND_COLOR;
+    int x1 = WIDTH/2,   y1 = HEIGHT/8;
+    int x2 = WIDTH/8,   y2 = HEIGHT/2;
+    int x3 = WIDTH*7/8, y3 = HEIGHT*7/8;
+    olivec_fill_circle(pixels, WIDTH, HEIGHT, x1, y1, radius, color);
+    olivec_fill_circle(pixels, WIDTH, HEIGHT, x2, y2, radius, color);
+    olivec_fill_circle(pixels, WIDTH, HEIGHT, x3, y3, radius, color);
+
+    olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y2, x2, y2, x3, y3, color);
 
     const char *file_path = "test_triangle.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
