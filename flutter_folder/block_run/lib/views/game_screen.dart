@@ -24,18 +24,19 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   
   late Pointer<Uint32> _pixelBuffer;
 
-  @override
+@override
   void initState() {
     super.initState();
     _pixelBuffer = calloc<Uint32>(width * height);
     
-    _game.objects.addAll([
-        GameObject(0, 0.2, false), 
-        GameObject(-1, 0.5, true), 
-        GameObject(1, 0.8, false), 
-    ]);
-
-    _ticker = createTicker(_tick)..start();
+    // Create a loop to spawn blocks so the game doesn't feel empty
+    _ticker = createTicker((elapsed) {
+      // Logic to spawn a block every 2 seconds
+      if (elapsed.inMilliseconds % 2000 < 20) {
+         _game.objects.add(GameObject((elapsed.inSeconds % 5) - 2, 0.0, false));
+      }
+      _tick(elapsed);
+    })..start();
   }
 
   @override
@@ -50,13 +51,11 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     
     var renderData = _game.getRenderData(width.toDouble(), height.toDouble());
     
-    // FIX: Use GameRenderObject here
-    Pointer<GameRenderObject> cObjects = calloc<GameRenderObject>(renderData.length);
+    Pointer<GameRenderObj> cObjects = calloc<GameRenderObj>(renderData.length);
     
     for (int i = 0; i < renderData.length; i++) {
       final item = renderData[i];
-      // FIX: access .ref on the element
-      final ref = cObjects.elementAt(i).ref;
+      final ref = (cObjects + 1).ref;
       
       ref.x = (item['x'] as num).toDouble();
       ref.y = (item['y'] as num).toDouble();
@@ -65,7 +64,6 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       ref.color = (item['color'] as num).toInt();
     }
 
-    // FIX: Pass GameRenderObject pointer
     _ffi.renderFrame(_pixelBuffer, width, height, cObjects, renderData.length);
     
     calloc.free(cObjects);

@@ -1,36 +1,34 @@
 #include <stdint.h>
-#include <stdbool.h>
-
-// Define olive.c implementation
 #define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
-// Struct matches the Dart struct exactly
 typedef struct {
-    float x;
-    float y;
-    float w;
-    float h;
-    uint32_t color; // AARRGGBB format
-} RenderObject;
+    float x, y, w, h;
+    uint32_t color;
+} GameRenderObj;
 
-// Exported function for Dart FFI
-__attribute__((visibility("default"))) __attribute__((used))
 void render_frame(uint32_t* pixels, int width, int height, 
-                  RenderObject* objects, int obj_count) {
-    // 1. Setup olive.c canvas pointing to Dart's pixel buffer
+                  GameRenderObj* objects, int obj_count) {
+    if (pixels == NULL) return;
+
     Olivec_Canvas oc = olivec_canvas(pixels, width, height, width);
     
-    // 2. Clear background to dark gray
-    olivec_fill(oc, 0xFF222222); 
+    // Clear with a very dark gray (Background)
+    olivec_fill(oc, 0xFF181818); 
 
-    // 3. Draw all objects (Obstacles, Points, Player) provided by Dart
     for (int i = 0; i < obj_count; i++) {
+        GameRenderObj obj = objects[i];
+        
+        // CLIP: 
+        // Only draw if within reasonable screen bounds to prevent olivec crashes
+        if (obj.y < -100 || obj.y > height + 100) continue;
+        if (obj.x < -width || obj.x > width * 2) continue;
+
         olivec_rect(oc,
-                    (int)objects[i].y,
-                    (int)objects[i].x,
-                    (int)objects[i].w,
-                    (int)objects[i].h,
-                    objects[i].color);
+                    (int)obj.x,
+                    (int)obj.y,
+                    (int)obj.w,
+                    (int)obj.h,
+                    obj.color);
     }
 }

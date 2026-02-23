@@ -46,8 +46,10 @@ class DatabaseHelper {
   }
   Future<Map<String, int>> getBestStats() async {
     final db = await instance.database;
-    final scoreResult = await db.rawQuery('SELECT MAX(score) as max_score FROM runs');
-    final timeResult = await db.rawQuery('SELECT MAX(duration_seconds) as max_time FROM runs');
+    String maxScore = 'SELECT MAX(score) as max_score FROM runs';
+    final scoreResult = await db.rawQuery(maxScore);
+    String maxDurationSec = 'SELECT MAX(duration_seconds) as max_time FROM runs';
+    final timeResult = await db.rawQuery(maxDurationSec);
     
     return {
       'highest_score': (scoreResult.first as int?) ?? 0,

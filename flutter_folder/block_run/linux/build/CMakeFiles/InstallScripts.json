@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/playme/github/study-o-code/flutter_folder/block_run/linux/build/cmake_install.cmake",
+		"/home/playme/github/study-o-code/flutter_folder/block_run/linux/build/flutter/cmake_install.cmake",
+		"/home/playme/github/study-o-code/flutter_folder/block_run/linux/build/runner/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
