@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #define OLIVE_IMPLEMENTATION
 #include "olive.c"
@@ -40,15 +41,19 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
     olivec_sort_tri_points_by_y(&x1, &y1,
                                 &x2, &y2,
                                 &x3, &y3);
-    int k12, c12;
-    if (olivec_line_of_segment(x1, y1, x2, y2, &k12, &c12)) {
-        int k23, c23;
-        if (olivec_line_of_segment(x2, y2, x3, y3, &k23, &c23)) {
+    if (x1 != x2) {
+        int dx12 = x2 - x1;
+        int dy12 = y2 - y1;
+        int c12 = y1 - dy12*x1/dx12;
+        if (x2 != x3) {
+            int dx23 = x2 - x3;
+            int dy23 = y2 - y3;
+            int c23 = y1 - dy23*x2/dx23;
             for (int y = y1; y <= y2; ++y) {
                 if (0 <= y && (size_t) y < height) {
                     // (y -c)/k -x
-                    int s1 = (y - c12)/k12;
-                    int s2 = (y - c23)/k23;
+                    int s1 = (y - c12)*dy12/dx12;
+                    int s2 = (y - c23)*dy23/dx23;
                     if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
                     for (int x = s1; x <= s2; ++x) {
                         if (0 < x && (size_t) x <= width) {
@@ -58,7 +63,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
                 }
             }
         } else {
-            UNREACHABLE();
+            assert(0 && "unreachable");
         }
     }
 }
