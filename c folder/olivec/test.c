@@ -8,10 +8,10 @@
 #include <string.h>
 #include <sys/types.h>
 
-#define GREEN 0xFF00FF00
-#define RED 0xFF0000FF 
-#define BLUE 0x00FFFF00
-#define YELLOW 0x0000FFFF
+#define GREEN_COLOR 0xFF00FF00
+#define RED_COLOR 0xFF0000FF 
+#define BLUE_COLOR 0x00FFFF00
+#define YELLOW_COLOR 0x0000FFFF
 
 #define WIDTH 800
 #define HEIGHT 600

@@ -40,11 +40,11 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
             for (int y = y1; y <= y2; ++y) {
                 if (0 <= y && (size_t) y < height) {
                     // (y -c)/k -x
-                    int s1 = (y - c12)*dx12/dy12;
-                    int s2 = (y - c13)*dx13/dy13;
+                    int s1 = dy12 != 0 ? (y - c12)*dx12/dy12 : x1;
+                    int s2 = dy13 != 0 ? (y - c13)*dx13/dy13 : x1;
                     if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
                     for (int x = s1; x <= s2; ++x) {
-                        if (0 < x && (size_t) x < width) {
+                        if (0 <= x && (size_t) x < width) {
                             pixels[y*width + x] = color;
                         }
                     }
@@ -68,7 +68,7 @@ bool fill_triangle(void) {
     olivec_fill_circle(pixels, WIDTH, HEIGHT, x2, y2, radius, color);
     olivec_fill_circle(pixels, WIDTH, HEIGHT, x3, y3, radius, color);
 
-    olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y2, x2, y2, x3, y3, BLUE);
+    olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, BLUE_COLOR);
 
     const char *file_path = "test_triangle.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
