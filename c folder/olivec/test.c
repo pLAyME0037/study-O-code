@@ -8,6 +8,11 @@
 #include <string.h>
 #include <sys/types.h>
 
+#define GREEN 0xFF00FF00
+#define RED 0xFF0000FF 
+#define BLUE 0x00FFFF00
+#define YELLOW 0x0000FFFF
+
 #define WIDTH 800
 #define HEIGHT 600
 
