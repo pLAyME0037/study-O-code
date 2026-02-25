@@ -26,6 +26,14 @@ void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_hei
 void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x1, int y1, int x2, int y2,
                       uint32_t color);
+void olivec_sort_tri_points_by_y(int *x1, int *y1,
+                                 int *x2, int *y2,
+                                 int *x3, int *y3);
+void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
+                          int x1, int y1,
+                          int x2, int y2,
+                          int x3, int y3,
+                          uint32_t color);
 Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path);
     
 #endif /* ifdef OLIVE_C_ */
@@ -160,6 +168,68 @@ void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
             for (int y = y1; y <= y2; ++y) {
                 if (0 <= y && y < (int) pixels_height) {
                     pixels[y*pixels_width + x] = color;
+                }
+            }
+        }
+    }
+}
+
+void olivec_sort_tri_points_by_y(int *x1, int *y1,
+                                 int *x2, int *y2,
+                                 int *x3, int *y3) {
+    if (*y1 > *y2) {
+        OLIVEC_SWAP(int, *x1, *x2);
+        OLIVEC_SWAP(int, *y1, *y2);
+    }
+    if (*y2 > *y3) {
+        OLIVEC_SWAP(int, *x2, *x3);
+        OLIVEC_SWAP(int, *y2, *y3);
+    }
+    if (*y1 > *y2) {
+        OLIVEC_SWAP(int, *x1, *x2);
+        OLIVEC_SWAP(int, *y1, *y2);
+    }
+    /* if (*y3 > *y1) { */
+    /*     OLIVEC_SWAP(int, *x3, *x1); */
+    /*     OLIVEC_SWAP(int, *y3, *y1); */
+    /* } */
+}
+
+void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
+                          int x1, int y1,
+                          int x2, int y2,
+                          int x3, int y3,
+                          uint32_t color) {
+    olivec_sort_tri_points_by_y(&x1, &y1,
+                                &x2, &y2,
+                                &x3, &y3);
+    int dx12 = x2 - x1;
+    int dy12 = y2 - y1;
+    int dx13 = x3 - x1;
+    int dy13 = y3 - y1;
+    int dx23 = x3 - x2;
+    int dy23 = y3 - y2;
+    for (int y = y1; y <= y2; ++y) {
+        if (0 <= y && (size_t) y < height) {
+            // (y -c)/k -x
+            int s1 = dy12 != 0 ? (y - y1)*dx12/dy12 + x1 : x1;
+            int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
+            if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
+            for (int x = s1; x <= s2; ++x) {
+                if (0 <= x && (size_t) x < width) {
+                    pixels[y*width + x] = color;
+                }
+            }
+        } 
+    }
+    for (int y = y2; y <= y3; ++y) {
+        if (0 <= y && (size_t) y < height) {
+            int s1 = dy23 != 0 ? (y - y2)*dx23/dy23 + x2 : x2;
+            int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
+            if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
+            for (int x = s1; x <= s2; ++x) {
+                if (0 <= x && (size_t) x < width) {
+                    pixels[y*width + x] = color;
                 }
             }
         }
