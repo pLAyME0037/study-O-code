@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class i_BinarySearch {
     public static void main(String[] args) {
-        
+
         // Binary search = Search algorithm that finds the position of a target value within a sorted array. Half of the array is eliminated during each "step".
 
         int array[] = new int[1000000];
@@ -27,7 +27,7 @@ public class i_BinarySearch {
     }
 
     private static int binarySearch(int[] array, int target) {
-        
+
         int low = 0;
         int high = array.length -1;
 
