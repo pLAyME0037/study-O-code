@@ -2,7 +2,7 @@
 #include <stack>
 #include <string>
 
-int main (){
+int main () {
     std::stack<std::string> stack;
 
     stack.push("Minecraft");

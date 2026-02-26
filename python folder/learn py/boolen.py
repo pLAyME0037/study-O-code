@@ -8,19 +8,19 @@ bool([])
 bool({})
 
 class myFirstBool():
-   def __len__(self):
-      return 0
-   
+    def __len__(self):
+        return 0
+
 myobj = myFirstBool()
 print(bool(myobj))  # This will print False since __len__ returns 0
 
 def myFunc():
-   return False
+    return False
 
 if myFunc():
-   print("YES!")
+    print("YES!")
 else:
-   print("NO!")
+    print("NO!")
 
 num = 0
 print(isinstance(num, bool))  # This will print False since num is an int, not a bool
