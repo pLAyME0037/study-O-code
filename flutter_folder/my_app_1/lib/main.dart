@@ -3,6 +3,12 @@ import 'package:my_app_1/src/button_nav_demo.dart';
 import 'package:my_app_1/src/counter_app.dart';
 import 'package:my_app_1/src/event_app.dart';
 import 'package:my_app_1/src/multi_screen_app.dart';
+import 'package:my_app_1/src/views/alert_dialog.dart';
+import 'package:my_app_1/src/views/bottom_text.dart';
+import 'package:my_app_1/src/views/card_demo.dart';
+import 'package:my_app_1/src/views/list_title_demo.dart';
+import 'package:my_app_1/src/views/nested_screen.dart';
+import 'package:my_app_1/src/views/snack_bar_demo.dart';
 
 void main() {
     runApp(const MaterialApp(home: MainLauncher(),));
@@ -20,6 +26,12 @@ class MainLauncher extends StatelessWidget {
             _buildLauncherButton(context, 'Button Nav Demo', const BottomNavDemo()),
             _buildLauncherButton(context, 'Event App 1', const EventApp1()),
             _buildLauncherButton(context, 'Multi Screen App', const AppScreen()),
+            _buildLauncherButton(context, 'Nested Screen App', const NestedScreen()),
+            _buildLauncherButton(context, 'Bottom Text', const BottomText()),
+            _buildLauncherButton(context, 'Card Demo', const CardApp()),
+            _buildLauncherButton(context, 'Alert Dialog Demo', AlertDialogDemo()),
+            _buildLauncherButton(context, 'Snack Bar Demo', SnackBarDemo()),
+            _buildLauncherButton(context, 'List Tile Demo', ListTitleDemo()),
         ],),);
     }
 
