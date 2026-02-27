@@ -6,12 +6,19 @@ import 'package:my_app_1/src/multi_screen_app.dart';
 import 'package:my_app_1/src/views/alert_dialog.dart';
 import 'package:my_app_1/src/views/bottom_text.dart';
 import 'package:my_app_1/src/views/card_demo.dart';
+import 'package:my_app_1/src/views/drawer.dart';
 import 'package:my_app_1/src/views/list_title_demo.dart';
 import 'package:my_app_1/src/views/nested_screen.dart';
+import 'package:my_app_1/src/views/nested_scroll.dart';
+import 'package:my_app_1/src/views/show_dialoag.dart';
+import 'package:my_app_1/src/views/show_material_banner.dart';
+import 'package:my_app_1/src/views/show_model_bottom_sheet.dart';
 import 'package:my_app_1/src/views/snack_bar_demo.dart';
+import 'package:my_app_1/src/views/structure_flutter_for_scaffold.dart';
+import 'package:my_app_1/src/views/toast_message.dart';
 
 void main() {
-    runApp(const MaterialApp(home: MainLauncher(),));
+    runApp(const MaterialApp(home: MainLauncher()));
 }
 
 class MainLauncher extends StatelessWidget {
@@ -32,7 +39,14 @@ class MainLauncher extends StatelessWidget {
             _buildLauncherButton(context, 'Alert Dialog Demo', AlertDialogDemo()),
             _buildLauncherButton(context, 'Snack Bar Demo', SnackBarDemo()),
             _buildLauncherButton(context, 'List Tile Demo', ListTitleDemo()),
-        ],),);
+            _buildLauncherButton(context, 'Nested Scroll', NestedScrollDemo()),
+            _buildLauncherButton(context, 'Toast App', ToastApp()),
+            _buildLauncherButton(context, 'Dialog App', DialogApp()),
+            _buildLauncherButton(context, 'Banner App', BannerApp()),
+            _buildLauncherButton(context, 'Banner Bottom Sheet', BottomSheetApp()),
+            _buildLauncherButton(context, 'Flutter Scaffold Structure', FlutterScaffoldStructure()),
+            _buildLauncherButton(context, 'Drawer Demo', DrawerDemo()),
+        ]));
     }
 
     Widget _buildLauncherButton(BuildContext context, String title, Widget target) {
@@ -43,7 +57,7 @@ class MainLauncher extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => target),
             );
-        }),);
+        }));
     }
 }
 
