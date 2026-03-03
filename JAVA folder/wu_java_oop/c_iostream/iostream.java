@@ -1,16 +1,77 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.DataOutputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 
-class c_iostream {
+class iostream {
     static FileInputStream in = null;
     static FileOutputStream out = null;
-    static final String dataFile = "invoicedata";
+
+    public static void main(String[] args) throws IOException {
+        // byteStream();
+        charStream();
+        readCharStream();
+        // dataStream();
+        // readDataStream();
+    }
+
+    public static void byteStream() throws IOException {
+        try {
+            in = new FileInputStream("./temp/input_text.txt");
+            out = new FileOutputStream("./temp/output_text.txt");
+            String message = "message: Hello, World.\n";
+            out.write(message.getBytes());
+            int c;
+            while ((c = in.read()) != -1) { out.write(c); }
+        } finally {
+            if (in != null) in.close();
+            if (out != null) out.close();
+        }
+    }
+
+    public static void charStream() throws IOException {
+        FileWriter fw = null;
+        FileReader fr = null;
+
+        try {
+            fr = new FileReader("./temp/input_text.txt");
+            fw = new FileWriter("./temp/output_text.txt");
+
+            String message = "message: Hello, World.\n";
+            fw.write(message);
+            int c;
+            while ((c = fr.read()) != -1) { fw.write(c); }
+        } finally {
+            if (fr != null) fr.close();
+            if (fw != null) fw.close();
+        }
+    }
+
+    public static void readCharStream() throws IOException {
+        BufferedReader is = null;
+        PrintWriter    os = null;
+
+        try {
+            is = new BufferedReader(new FileReader("./temp/input_text.txt"));
+            os = new PrintWriter(new FileWriter("./temp/output_text.txt"));
+
+            String l;
+            while ((l = is.readLine()) != null) System.out.println(l);
+        } finally {
+            if (is != null) is.close();
+            if (os != null) os.close();
+        }
+    }
+
+    static final String dataFile = "./temp/invoicedata";
     static final double[] prices = { 19.99, 9.99, 15.99, 3.99, 4.99 };
     static final int[] units = { 12, 8, 13, 29, 50 };
     static final String[] descs = {
@@ -20,27 +81,6 @@ class c_iostream {
         "Java Pin",
         "Java Key Chain"
     };
-
-    public static void main(String[] args) throws IOException {
-        byteStream();
-        dataStream();
-        readDataStream();
-    }
-
-    public static void byteStream() throws IOException {
-        try {
-            in = new FileInputStream("./temp/input_text.txt");
-            out = new FileOutputStream("./temp/output_text.txt");
-            String message = "message: Hello, World.";
-            in.read(message.getBytes());
-            out.write(message.getBytes());
-            int c;
-            while ((c = in.read()) != -1) { out.write(c); }
-        } finally {
-            if (in != null) in.close();
-            if (out != null) in.close();
-        }
-    }
 
     public static void dataStream() throws IOException {
         try (DataOutputStream out = new DataOutputStream(
@@ -73,9 +113,11 @@ class c_iostream {
                 total += unit * price;
             }
         } catch (EOFException e) {
-            System.out.println("Total: $" + total);
+            System.out.printf("Total: $%.2f", total);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
