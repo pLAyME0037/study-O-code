@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
+import java.util.Scanner;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +20,10 @@ class iostream {
     public static void main(String[] args) throws IOException {
         // byteStream();
         // charStream();
-        readCharStream();
+        // readCharStream();
+        scanRead();
+        double n = 4000 - 40100;
+        System.out.format("%f, %2$+020.10f %n", Math.PI, n);
         // dataStream();
         // readDataStream();
     }
@@ -65,7 +70,7 @@ class iostream {
 
             String l;
             while ((l = is.readLine()) != null) {
-                System.out.println(l); 
+                System.out.println(l);
                 // os.write(l);
                 os.println(l);
             }
@@ -121,5 +126,36 @@ class iostream {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void scanRead() throws IOException {
+        Scanner s = null;
+        double number = 0;
+
+        try {
+            s = new Scanner(
+                new BufferedReader(
+                new FileReader("./data_files/input_text.txt")));
+            // s.useDelimiter(",\\s*"); // comma & optional space
+            while (s.hasNext()) { System.out.println(s.next()); }
+        } finally {
+            if (s != null) s.close();
+        }
+
+        System.out.println("----------------------------");
+
+        try {
+            s = new Scanner(
+                new BufferedReader(
+                new FileReader("./data_files/number.txt")));
+            s.useLocale(Locale.US);
+            while (s.hasNext()) {
+                if (s.hasNextDouble()) { number += s.nextDouble(); } 
+                else { s.next(); }
+            }
+        } finally {
+            if (s != null) s.close();
+        }
+        System.out.printf("Sum: %.2f%n", number);
     }
 }
