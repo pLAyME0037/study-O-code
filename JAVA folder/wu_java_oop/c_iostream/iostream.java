@@ -1,7 +1,9 @@
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.Arrays;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Console;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,9 +23,9 @@ class iostream {
         // byteStream();
         // charStream();
         // readCharStream();
-        scanRead();
-        double n = 4000 - 40100;
-        System.out.format("%f, %2$+020.10f %n", Math.PI, n);
+        // scanRead();
+        usingConsole();
+        // System.out.format("%f, %1$+020.10f %n", Math.PI);
         // dataStream();
         // readDataStream();
     }
@@ -150,12 +152,57 @@ class iostream {
                 new FileReader("./data_files/number.txt")));
             s.useLocale(Locale.US);
             while (s.hasNext()) {
-                if (s.hasNextDouble()) { number += s.nextDouble(); } 
+                if (s.hasNextDouble()) { number += s.nextDouble(); }
                 else { s.next(); }
             }
         } finally {
             if (s != null) s.close();
         }
         System.out.printf("Sum: %.2f%n", number);
+    }
+
+    public static void usingConsole() {
+        Console c = System.console();
+        if (c == null) {
+            System.out.println("No console was found.");
+            System.exit(1);
+        }
+
+        char[] password = c.readPassword("Enter Your Password: ");
+        String oldPasswordT = "12345678";
+        if (!verify(oldPasswordT, password)) {
+            System.out.println("Wrong Password!");
+            Arrays.fill(password, ' ');
+            System.exit(1);
+        }
+
+        // char[] oldPassword  = c.readPassword("Enter Your Old Password: ");
+
+        boolean isMatch = false;
+        do {
+            char[] newPW  = c.readPassword("Enter new Password: ");
+            char[] newPWC = c.readPassword("Confirm new Password: ");
+
+            if (Arrays.equals(newPW, newPWC)) {
+                change(oldPasswordT, newPW);
+                c.format("Password change successfully %n");
+                c.format("Password %s has change. %n", password);
+
+                Arrays.fill(newPW, ' ');
+                Arrays.fill(newPWC, ' ');
+
+                isMatch = true;
+            } else {
+                c.format("Password do not match. Try Agian!");
+            }
+        } while (!isMatch);
+        Arrays.fill(password, ' ');
+    }
+
+    static boolean verify(String pass, char[] oldPass) {
+        return Arrays.equals(pass.toCharArray(), oldPass);
+    }
+    static void change(String login, char[] password) {
+        System.out.println("Updating password...");
     }
 }

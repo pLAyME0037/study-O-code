@@ -1,7 +1,8 @@
 import java.util.Scanner;
+
 public class II_userinput {
     public static void main(String[] args) {
-        
+
         String place;
         Scanner scanner = new Scanner(System.in);
         System.out.print("name a place: ");
