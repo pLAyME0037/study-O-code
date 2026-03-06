@@ -1,10 +1,11 @@
 #include <stdio.h>
-int main(){
 
+int main() {
     int age;
     char name[25];
+
     printf("What is your name?");
-    scanf("%s", &name);
+    scanf("%s", name);
 
     printf("How old are you?");
     scanf("%d", &age);  //& - address of operator

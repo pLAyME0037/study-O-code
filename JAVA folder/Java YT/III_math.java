@@ -18,7 +18,7 @@ public class III_math {
         System.out.println("c = " + c);
         System.out.println("d = " + d);
         System.out.println("e = " + e);
-        
+
         int x = 3;
         int y = 5;
 

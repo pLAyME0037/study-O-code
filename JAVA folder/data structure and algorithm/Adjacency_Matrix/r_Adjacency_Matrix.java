@@ -31,3 +31,4 @@ public class r_Adjacency_Matrix {
         System.out.println("4, 3 is excised: " + graph.checkEdge(4, 3));
     }
 }
+
