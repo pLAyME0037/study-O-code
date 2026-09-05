@@ -5,6 +5,7 @@
 #define BUILD_FOLDER "./build/"
 #define SQLITE3_AMALGAMATION_FOLDER "./src/sqlite-amalgamation-3460100/"
 #define SQLITE3_OBJ_PATH BUILD_FOLDER"sqlite3.o"
+#define COROUTINE_OBJ_PATH BUILD_FOLDER"coroutine.o"
 #define BUNDLE_H_PATH BUILD_FOLDER"bundle.h"
 #define BUILD_TIME_PATH BUILD_FOLDER"build_time.txt"
 
@@ -151,6 +152,23 @@ bool build_sqlite3(void) {
     return true;
 }
 
+bool build_coroutine(void) {
+    const char *output_path = COROUTINE_OBJ_PATH;
+    const char *input_path = "./src/coroutine/coroutine.c";
+    int rebuild_is_needed = needs_rebuild1(output_path, input_path);
+    if (rebuild_is_needed < 0) return false;
+    if (rebuild_is_needed) {
+        Cmd cmd = {0};
+        cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb",
+                   "-I./src/coroutine",
+                   "-O3", "-c", "-o", output_path, input_path);
+        if (!cmd_run_sync_and_reset(&cmd)) return false;
+    } else {
+        nob_log(NOB_INFO, "%s is up to date", output_path);
+    }
+    return true;
+}
+
 typedef struct {
     Cmd cmd;
     const char *display_root;
@@ -263,11 +281,14 @@ int main(int argc, char **argv) {
 
     if (!build_sqlite3()) return 1;
 
+    if (!build_coroutine()) return 1;
+
     if (build_bundle(webc_build_time)) return 1;
 
-    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-fsanitize=address", "-fno-omit-frame-pointer",
+    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb",
                "-I"BUILD_FOLDER,
                "-I"SQLITE3_AMALGAMATION_FOLDER,
+               "-I./src/coroutine",
                "-o", "./bin/webc",
                "webc.c", "core/serve.c", "core/route.c",
                "core/header.c", "core/footer.c",
@@ -290,7 +311,7 @@ int main(int argc, char **argv) {
                "src/patient_invoice/patient_invoice.c",
                "src/stock/stock.c",
                "src/user/user.c",
-               SQLITE3_OBJ_PATH);
+               SQLITE3_OBJ_PATH, COROUTINE_OBJ_PATH);
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     return 0;

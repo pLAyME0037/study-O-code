@@ -14,6 +14,7 @@ typedef struct {
 
 void sc_reset(Serve_Context *sc);
 void serve_request(Serve_Context *sc);
+void coroutine_server_run(const char *addr, uint16_t port);
 
 const char *http_reason_phrase_by_status_code(int status_code);
 void http_render_response(Serve_Context *sc, int status_code, const char *content_type, String_View body);

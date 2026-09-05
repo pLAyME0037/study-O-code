@@ -546,3 +546,55 @@ sqlite3 *open_webc_db(void) {
 defer:
     return result;
 }
+
+// Connection pool implementation
+static sqlite3 *db_pool[DB_POOL_SIZE] = {0};
+static int db_pool_index = 0;
+static bool db_pool_initialized = false;
+
+void db_pool_init(void) {
+    if (db_pool_initialized) return;
+    for (int i = 0; i < DB_POOL_SIZE; ++i) {
+        db_pool[i] = open_webc_db();
+        if (!db_pool[i]) {
+            fprintf(stderr, "ERROR: Failed to initialize DB pool connection %d\n", i);
+            // Clean up already created connections
+            for (int j = 0; j < i; ++j) {
+                sqlite3_close(db_pool[j]);
+                db_pool[j] = NULL;
+            }
+            return;
+        }
+    }
+    db_pool_initialized = true;
+    printf("DB pool initialized with %d connections\n", DB_POOL_SIZE);
+}
+
+void db_pool_cleanup(void) {
+    if (!db_pool_initialized) return;
+    for (int i = 0; i < DB_POOL_SIZE; ++i) {
+        if (db_pool[i]) {
+            sqlite3_close(db_pool[i]);
+            db_pool[i] = NULL;
+        }
+    }
+    db_pool_initialized = false;
+}
+
+sqlite3 *db_pool_get(void) {
+    if (!db_pool_initialized) {
+        db_pool_init();
+    }
+    if (!db_pool_initialized) return NULL;
+    
+    // Simple round-robin
+    sqlite3 *db = db_pool[db_pool_index];
+    db_pool_index = (db_pool_index + 1) % DB_POOL_SIZE;
+    return db;
+}
+
+void db_pool_put(sqlite3 *db) {
+    // In this simple implementation, we don't need to do anything
+    // The connection stays in the pool
+    (void)db;
+}

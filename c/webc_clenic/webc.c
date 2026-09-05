@@ -201,85 +201,13 @@ bool serve_run(Command *self, const char *program_name, int argc, char **argv) {
     UNUSED(self);
     UNUSED(program_name);
 
-    bool result = true;
-    // NOTE: We are intentionally not listening to the external addresses, because we are using a
-    // custom scuffed implementation of HTTP protocol, which is incomplete and possibly insecure.
-    // The `serve` command is meant to be used only locally by a single person. At least for now.
-    // We are doing it for the sake of simplicity, 'cause we don't have to ship an entire proper
-    // HTTP server. Though, if you really want to, you can always slap some reverse proxy like nginx
-    // on top of the `serve`.
     const char *addr = DEFAULT_SERVER_ADDRESS;
     uint16_t port = DEFAULT_SERVE_PORT;
     if (argc > 0) port = atoi(shift(argv, argc));
 
-    int server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd < 0) {
-        fprintf(stderr, "ERROR: Could not create socket epicly: %s\n", strerror(errno));
-        return_defer(false);
-    }
+    coroutine_server_run(addr, port);
 
-    int option = 1;
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
-
-    struct sockaddr_in server_addr;
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
-    server_addr.sin_addr.s_addr = inet_addr(addr);
-
-    ssize_t err = bind(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
-    if (err != 0) {
-        fprintf(stderr, "ERROR: Could not bind socket epicly: %s\n", strerror(errno));
-        return_defer(false);
-    }
-
-    err = listen(server_fd, 80);
-    if (err != 0) {
-        fprintf(stderr, "ERROR: Could not listen to socket, it's too quiet: %s\n", strerror(errno));
-        return_defer(false);
-    }
-
-    printf("Listening to http://%s:%d/\n", addr, port);
-
-    // NOTE: Writes to sockets that the client already closed would raise
-    // SIGPIPE and silently kill the whole server. Ignore it and handle the
-    // EPIPE return values in write_entire_sv instead.
-    signal(SIGPIPE, SIG_IGN);
-
-    Serve_Context sc = {0};
-    for (;;) {
-        struct sockaddr_in client_addr;
-        socklen_t client_addrlen = 0;
-        sc.client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_addrlen);
-        if (sc.client_fd < 0) {
-            fprintf(stderr, "ERROR: Could not accept connection. This is unacceptable! %s\n", strerror(errno));
-            continue;
-        }
-
-        UNUSED(serve_request(&sc));
-
-        shutdown(sc.client_fd, SHUT_WR);
-        // Drain any unread data with a bounded wait so a slow or keep-alive
-        // client can never stall the single-threaded server.
-        struct pollfd pfd = { .fd = sc.client_fd, .events = POLLIN };
-        char buffer[4096];
-        while (poll(&pfd, 1, 100) > 0) {
-            if (read(sc.client_fd, buffer, sizeof(buffer)) <= 0) break;
-        }
-        close(sc.client_fd);
-        sc_reset(&sc);
-        temp_reset();
-    }
-
-    // TODO: The only way to stop the server is by SIGINT, but that probably
-    // doesn't close the db correctly.
-    // So we probably should add a SIGINT handler specifically for this.
-
-    UNREACHABLE("serve");
-
-defer:
-    // TODO: properly close the sockets on defer
-    return result;
+    return true;
 }
 
 bool dev_run(Command *self, const char *program_name, int argc, char **argv) {
