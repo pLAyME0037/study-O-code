@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="user_info.Views.ProductCate">
+
+<ScrollView>
+    <VerticalStackLayout
+        Padding="30.0"
+        Background="#121218"
+        Spacing="25">
+        <Label
+            Text="Product With Categlory"
+            FontSize="22"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"/>
+
+        <HorizontalStackLayout Spacing="10">
+            <!-- <Border -->
+            <!--     Stroke="#C49B33" -->
+            <!--     StrokeThickness="4" -->
+            <!--     StrokeShape="RoundRectangle 1,1,1,1" -->
+            <!--     Background="#2B0B98" -->
+            <!--     Padding="16,9" -->
+            <!--     HorizontalOptions="Center"> -->
+            <!-- </Border> -->
+            <Picker
+                x:Name="PickerCateglory"
+                Title="Select a Categlory"
+                ItemDisplayBinding="{Binding .}" />
+            <Button
+                Text="Search"
+                Clicked="OnPickerCate" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Border
+                Stroke="#C49B33"
+                StrokeThickness="4"
+                StrokeShape="RoundRectangle 1,1,1,1"
+                Background="#2B0B98"
+                Padding="16,9"
+                HorizontalOptions="Center">
+                <Entry
+                    x:Name="SearchEntry"
+                    Placeholder="Enter Product Name"
+                    WidthRequest="300"
+                    FontSize="18" />
+            </Border>
+            <Button
+                Text="Search"
+                Clicked="OnSearchNameClicked" />
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="ProductCollectionView">
+            <CollectionView.Header>
+                <Grid
+                    ColumnDefinitions="60,*,*,80"
+                    Padding="10"
+                    BackgroundColor="#1e1e2e">
+                    <Label
+                        Text="ID"
+                        Grid.Column="0"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Name"
+                        Grid.Column="1"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Price"
+                        Grid.Column="2"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Categlory"
+                        Grid.Column="3"
+                        FontAttributes="Bold"/>
+                </Grid>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        ColumnDefinitions="60,*,*,80"
+                        Padding="10"
+                        BackgroundColor="#1e1e2e">
+                        <Label
+                            Text="{Binding Id}"
+                            FontSize="18"
+                            Grid.Column="0" />
+                        <Label
+                            Text="{Binding Name}"
+                            FontSize="18"
+                            Grid.Column="1" />
+                        <Label
+                            Text="{Binding Price}"
+                            FontSize="18"
+                            Grid.Column="2" />
+                        <Label
+                            Text="{Binding Categlory}"
+                            FontSize="18"
+                            Grid.Column="3" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+
+</ScrollView>
+</ContentPage>
+

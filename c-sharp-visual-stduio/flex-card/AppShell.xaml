@@ -8,6 +8,9 @@
     xmlns:views.student_db="clr-namespace:user_info.Views.StudentDB"
     Title="user_info">
 
+    <ShellContent Title="Product Cate"
+                  ContentTemplate="{DataTemplate views:ProductCate}" />
+
     <ShellContent Title="Student Database"
                   ContentTemplate="{DataTemplate views.student_db:StudentList}" />
 
