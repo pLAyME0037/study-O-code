@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="user_info.Views.StudentDB.StudentListAdd">
+
+    <Grid
+        RowDefinitions="Auto, Auto, Auto, *"
+        Padding="30"
+        Background="#121218"
+        RowSpacing="15">
+
+        <VerticalStackLayout
+            Grid.Row="0"
+            Spacing="10">
+            <Label
+                Text="Student Management System"
+                FontSize="28"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+
+            <Label
+                Text="Name"
+                FontSize="18"/>
+            <Border
+                Stroke="#C49B33"
+                StrokeThickness="3"
+                StrokeShape="RoundRectangle 1,1,1,1"
+                Background="#2B0B98"
+                Padding="16,0"
+                HorizontalOptions="Start">
+                <Entry
+                    x:Name="txtName"
+                    FontSize="21"
+                    Placeholder="Enter Student Name"
+                    Text="{Binding Name}"/>
+            </Border>
+
+            <Label
+                Text="Age"
+                FontSize="18"/>
+            <Border
+                Stroke="#C49B33"
+                StrokeThickness="3"
+                StrokeShape="RoundRectangle 1,1,1,1"
+                Background="#2B0B98"
+                Padding="16,0"
+                HorizontalOptions="Start">
+                <Entry
+                    Placeholder="Enter Student Age"
+                    FontSize="21"
+                    x:Name="txtAge"
+                    Text="{Binding Age}"/>
+            </Border>
+
+            <Label
+                Text="Gender"
+                FontSize="18"/>
+            <Picker
+                x:Name="pickerGender"
+                FontSize="21"
+                SelectedItem="{Binding Sex}">
+                <Picker.Items>
+                    <x:String>Male</x:String>
+                    <x:String>Female</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label
+                Text="Email"
+                FontSize="18"/>
+            <Border
+                Stroke="#C49B33"
+                StrokeThickness="3"
+                StrokeShape="RoundRectangle 1,1,1,1"
+                Background="#2B0B98"
+                Padding="16,0"
+                HorizontalOptions="Start">
+                <Entry
+                    Placeholder="Enter Student Email"
+                    FontSize="21"
+                    x:Name="txtEmail"
+                    Text="{Binding Email}"/>
+            </Border>
+
+            <Label
+                Text="Major"
+                FontSize="18"/>
+            <Picker
+                x:Name="pickerMajor"
+                FontSize="21"
+                SelectedItem="{Binding Major}">
+                <Picker.Items>
+                    <x:String>Computer Science</x:String>
+                    <x:String>Information Technology</x:String>
+                    <x:String>Business Administration</x:String>
+                    <x:String>Accounting</x:String>
+                </Picker.Items>
+            </Picker>
+        </VerticalStackLayout>
+
+        <Button
+            Grid.Row="1"
+            Text="Add Student"
+            HeightRequest="50"
+            Command="{Binding AddStudentCommand}"/>
+
+        <BoxView
+            Grid.Row="2"
+            HeightRequest="2"
+            Color="Gray"/>
+
+        <CollectionView
+            Grid.Row="3"
+            ItemsSource="{Binding Students}">
+            <CollectionView.Header>
+                <Grid
+                    ColumnDefinitions="60,*,60,*,*,60,*"
+                    Padding="10"
+                    BackgroundColor="#1e1e2e">
+                    <Label
+                        Text="ID"
+                        Grid.Column="0"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Name"
+                        Grid.Column="1"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Sex"
+                        Grid.Column="2"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Email"
+                        Grid.Column="3"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Major"
+                        Grid.Column="4"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Age"
+                        Grid.Column="5"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Actions"
+                        Grid.Column="6"
+                        FontAttributes="Bold"/>
+                </Grid>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        ColumnDefinitions="60,*,60,*,*,60,*"
+                        Padding="10"
+                        BackgroundColor="#1e1e2e">
+                        <Label
+                            Text="{Binding Id}"
+                            FontSize="16"
+                            Grid.Column="0"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Text="{Binding Name}"
+                            FontSize="16"
+                            Grid.Column="1"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Text="{Binding Sex}"
+                            FontSize="16"
+                            Grid.Column="2"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Text="{Binding Email}"
+                            FontSize="16"
+                            Grid.Column="3"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Text="{Binding Major}"
+                            FontSize="16"
+                            Grid.Column="4"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Text="{Binding Age}"
+                            FontSize="16"
+                            Grid.Column="5"
+                            VerticalOptions="Center"/>
+
+                        <HorizontalStackLayout
+                            Grid.Column="6"
+                            Spacing="5">
+                            <Button
+                                Text="Edit"
+                                BackgroundColor="Orange"/>
+                            <Button
+                                Text="Delete"
+                                BackgroundColor="Red"
+                                TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

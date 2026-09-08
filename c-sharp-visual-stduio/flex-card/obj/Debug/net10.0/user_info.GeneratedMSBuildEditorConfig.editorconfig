@@ -188,6 +188,26 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/Views/StudentDB/StudentListAdd.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = user_info.Views.StudentDB.StudentListAdd.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/StudentDB/StudentListAdd.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/StudentDB/StudentListAdd.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/Views/StudentDB/StudentListCollection.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = user_info.Views.StudentDB.StudentListCollection.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/StudentDB/StudentListCollection.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/StudentDB/StudentListCollection.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/Views/StudentManagement.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = user_info.Views.StudentManagement.xaml

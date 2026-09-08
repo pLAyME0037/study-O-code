@@ -22,6 +22,21 @@ public class DBService
         await _database.CreateTableAsync<Student>();
     }
 
+    public async Task AddStudentAsync(Student student) {
+        await InitializeDatabaseAsync();
+        await _database.InsertAsync(student);
+    }
+
+    public async Task UpdateStudentAsync(Student student) {
+        await InitializeDatabaseAsync();
+        await _database.UpdateAsync(student);
+    }
+
+    public async Task DeleteStudentAsync(Student student) {
+        await InitializeDatabaseAsync();
+        await _database.DeleteAsync(student);
+    }
+
     public async Task<List<Student>> GetStudentAsync() {
         await InitializeDatabaseAsync();
         return await _database!.Table<Student>().ToListAsync();
