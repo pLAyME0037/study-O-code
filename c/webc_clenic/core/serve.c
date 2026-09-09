@@ -170,8 +170,7 @@ static void serve_request_coro(void *arg) {
 
     route_request(&sc, method, uri);
 
-    if (!write_entire_sv_coro(client_fd, sb_to_sv(sc.response))) {
-    }
+    if (!write_entire_sv_coro(client_fd, sb_to_sv(sc.response))) { }
 
 cleanup:
     shutdown(client_fd, SHUT_WR);

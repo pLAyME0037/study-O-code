@@ -45,7 +45,7 @@
 #define NOTE_OPEN_COLOR  ColorFromHSV(120, 1, 1)
 #define NOTE_CLOSE_COLOR ColorFromHSV(30, 1, 1)
 
-#define BUFFER_SIZE      (1024*2)
+#define BUFFER_SIZE      (1024)
 #define SAMPLERATE       44100
 #define SAMPLESIZE       32
 #define CHANNELS         1
@@ -157,7 +157,7 @@ void note_press(note_t *note, int semitone, instrument_t instrument) {
     }
 }
 
-note_release_da *g_note_releases = NULL;
+static note_release_da *g_note_releases = NULL;
 void note_released(note_t *note) {
     float volumn;
     if (note->playing) {
@@ -199,7 +199,7 @@ int main(void) {
     int record_bar_amount        = 0;
     int quant_for_play           = 0;
     int quant_for_play_prev      = -1;
-    instrument_t instrument_curr = instrument_saw_tooth();
+    instrument_t instrument_curr = instrument_sine();
 
     while (!WindowShouldClose()) {
         float beat_time_prev = beat_time;
@@ -253,6 +253,15 @@ int main(void) {
         break;
         }
 
+        if (IsKeyPressed(KEY_ONE)) {
+            instrument_curr = instrument_sine();
+        }
+        if (IsKeyPressed(KEY_TWO)) {
+            instrument_curr = instrument_square();
+        }
+        if (IsKeyPressed(KEY_THREE)) {
+            instrument_curr = instrument_saw_tooth();
+        }
         if (IsKeyPressed(KEY_SPACE)) {
             switch (state) {
             case REPLAY:

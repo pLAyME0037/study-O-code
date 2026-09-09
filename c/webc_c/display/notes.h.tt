@@ -1,0 +1,59 @@
+<div>
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+        SQLite Notes
+    </h2>
+
+    <form method="POST" action="/notes/create"
+          class="mb-4 flex gap-2 items-end bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div>
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Title</label>
+            <input name="title" type="text" required
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="flex-1">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Body</label>
+            <input name="body" type="text"
+                   class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <button type="submit"
+                class="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-medium">
+            Add note
+        </button>
+    </form>
+
+    <table class="w-full text-left border-collapse overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <thead class="bg-indigo-600 text-white">
+            <tr>
+                <th class="px-4 py-3 font-semibold">#</th>
+                <th class="px-4 py-3 font-semibold">Title</th>
+                <th class="px-4 py-3 font-semibold">Created At</th>
+                <th class="px-4 py-3 font-semibold">Body</th>
+                <th class="px-4 py-3 font-semibold">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            ({ if (notes.count == 0) { })
+                <tr>
+                    <td colspan="5" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        No notes in the database yet.
+                    </td>
+                </tr>
+            ({ } else for (size_t i = 0; i < notes.count; ++i) { })
+                <tr>
+                    <td class="px-4 py-2 text-gray-500 dark:text-gray-400">({ INT(notes.items[i].id); })</td>
+                    <td class="px-4 py-2 font-medium text-gray-800 dark:text-white">({ ESCAPED(notes.items[i].title); })</td>
+                    <td class="px-4 py-2 text-gray-600 dark:text-gray-300">({ ESCAPED(notes.items[i].created_at); })</td>
+                    <td class="px-4 py-2 text-gray-600 dark:text-gray-300">({ ESCAPED(notes.items[i].body); })</td>
+                    <td class="px-4 py-2 whitespace-nowrap">
+                        <a href="/notes/({ INT(notes.items[i].id); })/edit"
+                           class="mr-2 px-2 py-1 rounded text-xs bg-amber-500 hover:bg-amber-600 text-white">Edit</a>
+                        <form method="POST" action="/notes/({ INT(notes.items[i].id); })/delete" class="inline">
+                            <button type="submit"
+                                    class="px-2 py-1 rounded text-xs bg-red-500 hover:bg-red-600 text-white">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            ({ } })
+        </tbody>
+    </table>
+</div>

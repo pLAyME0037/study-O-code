@@ -173,13 +173,13 @@ typedef struct {
     Cmd cmd;
     const char *display_root;
     const char *output_root;
-} Cttochtml_Walk_Data;
+} h_to_html_walk_data;
 
-bool cttochtml_walk_func(Nob_Walk_Entry entry) {
+bool h_to_html_walk_func(Nob_Walk_Entry entry) {
     if (entry.type != NOB_FILE_REGULAR) return true;
     if (!sv_ends_with_cstr(sv_from_cstr(entry.path), ".tt")) return true;
 
-    Cttochtml_Walk_Data *data = (Cttochtml_Walk_Data *)entry.data;
+    h_to_html_walk_data *data = (h_to_html_walk_data *)entry.data;
 
     String_View input = sv_from_cstr(entry.path);
     size_t prefix_len = strlen(data->display_root);
@@ -233,13 +233,13 @@ int prepare_cttochtml(Cmd cmd) {
     mkdir_if_not_exists("./auto_ctrl");
     mkdir_if_not_exists("./auto_ctrl/cttochtml");
 
-    Cttochtml_Walk_Data data = {
+    h_to_html_walk_data data = {
         .cmd = cmd,
         .display_root = "./display",
         .output_root = "./auto_ctrl/cttochtml",
     };
 
-    if (!nob_walk_dir("./display", cttochtml_walk_func, .data = &data)) return 1;
+    if (!nob_walk_dir("./display", h_to_html_walk_func, .data = &data)) return 1;
 
     return 0;
 }
@@ -296,6 +296,7 @@ int main(int argc, char **argv) {
                "core/crud.c", "core/crud_modules.c",
                "core/http/utils.c",
                "core/dashboard.c",
+               "core/table.c",
                "core/stock.c",
                "core/import.c",
                "core/patient_invoice.c",

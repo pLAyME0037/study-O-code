@@ -2,6 +2,7 @@
 
 #include "route.h"
 #include "notes.h"
+#include "table.h"
 #include "version.h"
 #include "crud.h"
 #include "crud_modules.h"
@@ -122,6 +123,10 @@ void serve_dashboard(Serve_Context *sc);
 void route_request(Serve_Context *sc, String_View method, String_View uri) {
     if (CMP_URI(uri, "/")) {
         serve_dashboard(sc);
+        return;
+    }
+    if (CMP_URI(uri, "/table")) {
+        serve_table(sc, method);
         return;
     }
     if (CMP_URI(uri, "/notes")) {
