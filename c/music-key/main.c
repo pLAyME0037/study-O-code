@@ -122,7 +122,7 @@ float note_update(note_t *note) {
 }
 
 typedef struct {
-    int          stop_frame;
+    size_t       stop_frame;
     float        stop_at_volumn;
     float        semitone;
     instrument_t instrument;
@@ -195,16 +195,16 @@ int main(void) {
 
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
-    float beat_time                 = 0.0f;
-    int record_bar_amount           = 0;
-    int quant_for_play              = 0;
-    int quant_for_play_prev         = -1;
-    instrument_t instrument_current = instrument_square();
+    float beat_time              = 0.0f;
+    int record_bar_amount        = 0;
+    int quant_for_play           = 0;
+    int quant_for_play_prev      = -1;
+    instrument_t instrument_curr = instrument_saw_tooth();
 
     while (!WindowShouldClose()) {
         float beat_time_prev = beat_time;
         beat_time += GetFrameTime();
-        int quant = (int)beat_time/QUANT_SECS;
+        int quant = (int)(beat_time/QUANT_SECS);
 
         if (fmodf(beat_time_prev, BEAT_SECS) > fmodf(beat_time, BEAT_SECS)) {
             // PlaySound(music);
@@ -220,7 +220,7 @@ int main(void) {
                     for (size_t i = 0; i < events->count; ++i) {
                         if (events->items[i].timestamp == quant_for_play) {
                             if (events->items[i].start) {
-                                note_press(&notes_replay[events->items[i].key_idx], events->items[i].semitone, instrument_current);
+                                note_press(&notes_replay[events->items[i].key_idx], events->items[i].semitone, instrument_curr);
                             } else {
                                 note_released(&notes_replay[events->items[i].key_idx]);
                             }
@@ -241,6 +241,7 @@ int main(void) {
                         event_da_add(events, (event_t) {
                             .timestamp = 0,
                             .start      = true,
+                            .key_idx    = (int)i,
                             .semitone   = notes_monitor[i].semitone,
                             .instrument = notes_monitor[i].instrument,
                         });
@@ -282,14 +283,14 @@ int main(void) {
         for (int key = 0; key < (int)NOTE_COUNT; ++key) {
             if (IsKeyDown(KEY_MAP[key]) && !notes_monitor[key].playing) {
                 int pitch = key + shift;
-                note_press(&notes_monitor[key], pitch, instrument_current);
+                note_press(&notes_monitor[key], pitch, instrument_curr);
                 if (state == RECORD) {
                     event_da_add(events, (event_t) {
                         .timestamp  = quant,
                         .start      = true,
                         .key_idx    = key,
                         .semitone   = pitch,
-                        .instrument = instrument_current,
+                        .instrument = instrument_curr,
                     });
                 }
             } else if (!IsKeyDown(KEY_MAP[key]) && notes_monitor[key].playing) {
@@ -299,7 +300,7 @@ int main(void) {
                         .start      = false,
                         .key_idx    = key,
                         .semitone   = notes_monitor[key].semitone,
-                        .instrument = instrument_current,
+                        .instrument = instrument_curr,
                     });
                 }
                 note_released(&notes_monitor[key]);
@@ -317,8 +318,8 @@ int main(void) {
                 }
                 note_playing += (int)g_note_releases->count;
 
+                float amp = 1.0f / (float)note_playing;
                 if (note_playing > 0) {
-                    float amp = 1.0f / (float)note_playing;
                     for (size_t semitone = 0; semitone < NOTE_COUNT; ++semitone) {
                         if (notes_monitor[semitone].playing) {
                             sample += note_update(&notes_monitor[semitone])*amp;

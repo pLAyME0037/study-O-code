@@ -10,6 +10,6 @@ if [[ -e "bin/main" ]]; then
     rm bin/main
 fi
 
-gcc temp.c $CFLAG $RAYLIB $CLIB -o bin/main
+gcc main.c $CFLAG $RAYLIB $CLIB -o bin/main
 
 ./bin/main
