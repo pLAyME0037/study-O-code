@@ -26,7 +26,7 @@ float func_saw_tooth(float x, void *data) {
     if (*p <= 0.0) *p = 0.0001;
     if (*p >= 0.9) *p = 0.9999;
     x = x - floorf(x);
-    if (x <= *p) {
+    if (x <= *p && *p > 0) {
         return LERPF(-1, 1, x / *p);
     }
     return LERPF(1, -1, (x - *p)/(1 - *p));
@@ -48,7 +48,7 @@ instrument_t instrument_square(void) {
 }
 
 instrument_t instrument_saw_tooth() {
-    static float data = 0.25;
+    static float data = 0.5;
     return (instrument_t) {
         .func = func_saw_tooth,
         .data = &data

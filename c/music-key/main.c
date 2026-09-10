@@ -13,6 +13,29 @@
 #define return_defer(value) do { result = (value); goto defer; } while(0)
 #define ARRAY_LEN(s) (sizeof(s)/sizeof(s[0]))
 
+#define SCREEN_FACTOR    200
+#define SCREEN_WIDTH     (4*SCREEN_FACTOR)
+#define SCREEN_HEIGHT    (4*SCREEN_FACTOR)
+#define NOTE_RADIUS      (0.015*SCREEN_HEIGHT)
+#define NOTE_OPEN_COLOR  ColorFromHSV(120, 1, 1)
+#define NOTE_CLOSE_COLOR ColorFromHSV(30, 1, 1)
+
+#define BUFFER_SIZE      (1024)
+#define SAMPLERATE       44100
+#define SAMPLESIZE       32
+#define CHANNELS         1
+#define ROOT_NOTE        440.0
+#define TWO_PI           6.28318530717958647692
+#define BPM              120.0
+#define BEAT_SECS        (60.0/BPM)
+#define BAR_BEATS        4
+#define BAR_SECS         (BAR_BEATS*BEAT_SECS)
+#define BAR_QUANT        32
+#define QUANT_SECS       (BAR_SECS/BAR_QUANT)
+
+#define NEXT_SEMITONE    powf(2.0, 1.0/12.0)
+#define INIT_CAPACITY    16
+
 #define DA_NEW(Type, Name)                                                \
     typedef struct {                                                      \
         Type  *items;                                                     \
@@ -38,29 +61,6 @@
     }                                                                     \
     static inline void Name##_free(Name *da) { free(da->items); free(da); }
 
-#define SCREEN_FACTOR    200
-#define SCREEN_WIDTH     (4*SCREEN_FACTOR)
-#define SCREEN_HEIGHT    (4*SCREEN_FACTOR)
-#define NOTE_RADIUS      (0.015*SCREEN_HEIGHT)
-#define NOTE_OPEN_COLOR  ColorFromHSV(120, 1, 1)
-#define NOTE_CLOSE_COLOR ColorFromHSV(30, 1, 1)
-
-#define BUFFER_SIZE      (1024)
-#define SAMPLERATE       44100
-#define SAMPLESIZE       32
-#define CHANNELS         1
-#define ROOT_NOTE        440.0
-#define TWO_PI           6.28318530717958647692
-#define BPM              120.0
-#define BEAT_SECS        (60.0/BPM)
-#define BAR_BEATS        4
-#define BAR_SECS         (BAR_BEATS*BEAT_SECS)
-#define BAR_QUANT        32
-#define QUANT_SECS       (BAR_SECS/BAR_QUANT)
-
-#define NEXT_SEMITONE    powf(2.0, 1.0/12.0)
-#define INIT_CAPACITY    16
-
 #define ATTACK_FRAME     (2205)
 #define RELEASE_FRAME    (4410)
 
@@ -69,6 +69,21 @@ const KeyboardKey KEY_MAP[] = {
     KEY_N, KEY_J, KEY_M, KEY_K, KEY_COMMA
 };
 #define NOTE_COUNT       ARRAY_LEN(KEY_MAP)
+
+const char *KEY_NAMES[NOTE_COUNT] = {
+    "Z", "S", "X", "D", "C", "F", "V", "G", "B", "H", "N", "J", "M", "K", ","
+};
+
+const char *NOTE_NAMES[12] = {
+    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+};
+
+const char *semitone_to_note_name(int semitone) {
+    int midi = 69 + semitone;
+    int note_idx = (midi % 12 + 12) % 12;
+    int octave = (midi >= 0) ? (midi / 12 - 1) : ((midi - 11) / 12 - 1);
+    return TextFormat("%s%d", NOTE_NAMES[note_idx], octave);
+}
 
 float clamp_f(float f, float min, float max) {
     if (f < min) return min;
@@ -149,27 +164,25 @@ void note_releases_unordered_rm_by_idx(note_release_da *nrs, size_t idx) {
 }
 
 void note_press(note_t *note, int semitone, instrument_t instrument) {
-    if (!note->playing) {
-        note->playing     = true;
-        note->start_frame = frame_count;
-        note->semitone    = semitone;
-        note->instrument  = instrument;
-    }
+    if (note->playing) return;
+    note->playing     = true;
+    note->start_frame = frame_count;
+    note->semitone    = semitone;
+    note->instrument  = instrument;
 }
 
 static note_release_da *g_note_releases = NULL;
 void note_released(note_t *note) {
     float volumn;
-    if (note->playing) {
-        note->playing = false;
-        volumn = clamp_f((float)(frame_count - note->start_frame)/ATTACK_FRAME, 0.0f, 1.0f);
-        note_release_da_add(g_note_releases, (note_release_t) {
-            .stop_frame     = frame_count,
-            .stop_at_volumn = volumn,
-            .semitone       = (float)note->semitone,
-            .instrument     = note->instrument,
-        });
-    }
+    if (!note->playing) return;
+    note->playing = false;
+    volumn = clamp_f((float)(frame_count - note->start_frame)/ATTACK_FRAME, 0.0f, 1.0f);
+    note_release_da_add(g_note_releases, (note_release_t) {
+        .stop_frame     = frame_count,
+        .stop_at_volumn = volumn,
+        .semitone       = (float)note->semitone,
+        .instrument     = note->instrument,
+    });
 }
 
 bool note_released_done(note_release_t *nr) {
@@ -199,6 +212,7 @@ int main(void) {
     int record_bar_amount        = 0;
     int quant_for_play           = 0;
     int quant_for_play_prev      = -1;
+
     instrument_t instrument_curr = instrument_sine();
 
     while (!WindowShouldClose()) {
@@ -211,41 +225,43 @@ int main(void) {
         }
         switch (state) {
         case REPLAY:
-            if (events->count > 0 && record_bar_amount > 0) {
-                event_t *last_event = peek(events);
-                record_bar_amount = (last_event->timestamp + BAR_QUANT - 1)/BAR_QUANT;
-                if (record_bar_amount < 1) record_bar_amount = 1;
-                quant_for_play = quant%(record_bar_amount*BAR_QUANT);
-                if (quant_for_play != quant_for_play_prev) {
-                    for (size_t i = 0; i < events->count; ++i) {
-                        if (events->items[i].timestamp == quant_for_play) {
-                            if (events->items[i].start) {
-                                note_press(&notes_replay[events->items[i].key_idx], events->items[i].semitone, instrument_curr);
-                            } else {
-                                note_released(&notes_replay[events->items[i].key_idx]);
-                            }
+            if (events->count == 0) {
+                break;
+            }
+            event_t *last_event = peek(events);
+            record_bar_amount = (last_event->timestamp + BAR_QUANT - 1)/BAR_QUANT;
+            if (record_bar_amount < 1) record_bar_amount = 1;
+            quant_for_play = quant%(record_bar_amount*BAR_QUANT);
+            if (quant_for_play != quant_for_play_prev) {
+                for (size_t i = 0; i < events->count; ++i) {
+                    if (events->items[i].timestamp == quant_for_play) {
+                        if (events->items[i].start) {
+                            note_press(&notes_replay[events->items[i].key_idx], events->items[i].semitone, instrument_curr);
+                        } else {
+                            note_released(&notes_replay[events->items[i].key_idx]);
                         }
                     }
-                    quant_for_play_prev = quant_for_play;
                 }
+                quant_for_play_prev = quant_for_play;
             }
         break;
         case WAIT_FOR_EOB:
-            if (fmodf(beat_time_prev, BAR_SECS) > fmodf(beat_time, BAR_SECS)) {
-                state = RECORD;
-                quant = 0;
-                beat_time = 0.0f;
-                quant_for_play_prev = -1;
-                for (size_t i = 0; i < ARRAY_LEN(notes_monitor); ++i) {
-                    if (notes_monitor[i].playing) {
-                        event_da_add(events, (event_t) {
-                            .timestamp = 0,
-                            .start      = true,
-                            .key_idx    = (int)i,
-                            .semitone   = notes_monitor[i].semitone,
-                            .instrument = notes_monitor[i].instrument,
-                        });
-                    }
+            if (fmodf(beat_time_prev, BAR_SECS) < fmodf(beat_time, BAR_SECS)) {
+                break;
+            }
+            state = RECORD;
+            quant = 0;
+            beat_time = 0.0f;
+            quant_for_play_prev = -1;
+            for (size_t i = 0; i < ARRAY_LEN(notes_monitor); ++i) {
+                if (notes_monitor[i].playing) {
+                    event_da_add(events, (event_t) {
+                        .timestamp  = 0,
+                        .start      = true,
+                        .key_idx    = (int)i,
+                        .semitone   = notes_monitor[i].semitone,
+                        .instrument = notes_monitor[i].instrument,
+                    });
                 }
             }
         break;
@@ -327,8 +343,8 @@ int main(void) {
                 }
                 note_playing += (int)g_note_releases->count;
 
-                float amp = 1.0f / (float)note_playing;
                 if (note_playing > 0) {
+                    float amp = 1.0f / (float)note_playing;
                     for (size_t semitone = 0; semitone < NOTE_COUNT; ++semitone) {
                         if (notes_monitor[semitone].playing) {
                             sample += note_update(&notes_monitor[semitone])*amp;
@@ -354,29 +370,45 @@ int main(void) {
         }
         BeginDrawing();
         ClearBackground(GetColor(0x121218FF));
+
         Vector2 note_pos = {GetScreenWidth() - 50, 50};
         int radius = 20;
         switch (state) {
-        case REPLAY: {
+        case REPLAY:
             DrawRing(note_pos, radius*0.9, radius, 0, 360, 100, YELLOW);
-        } break;
-        case WAIT_FOR_EOB: {
+        break;
+        case WAIT_FOR_EOB:
             DrawCircleV(note_pos, radius, BLUE);
-        } break;
-        case RECORD: {
+        break;
+        case RECORD:
             DrawCircleV(note_pos, radius, RED);
-        } break;
+        break;
         }
 
         record_bar_amount = 1;
         if (events->count > 0) {
             event_t *last_event = peek(events);
             record_bar_amount = (last_event->timestamp + BAR_QUANT - 1)/BAR_QUANT;
-            if (record_bar_amount < 1) record_bar_amount = 1;
         }
+        if (record_bar_amount < 1) record_bar_amount = 1;
 
         float quant_len = (float)GetScreenWidth()/(BAR_QUANT*record_bar_amount);
         float semitone_height = (float)GetScreenHeight()/(float)NOTE_COUNT;
+
+        for (int key = 0; key < (int)NOTE_COUNT; ++key) {
+            float y = key * semitone_height;
+            int active = notes_monitor[key].playing || notes_replay[key].playing;
+            int semi;
+            if (notes_monitor[key].playing) semi = notes_monitor[key].semitone;
+            else if (notes_replay[key].playing) semi = notes_replay[key].semitone;
+            else semi = key + shift;
+
+            const char *label;
+            label = TextFormat("%s - %s", KEY_NAMES[key], semitone_to_note_name(semi));
+            Color col = active ? YELLOW : Fade(GRAY, 0.9f);
+            DrawText(label, 12, (int)(y + (semitone_height - 16) / 2.0f), 16, col);
+        }
+
         for (size_t i = 0; i < events->count; ++i) {
             Vector2 note_pos = {
                 events->items[i].timestamp*quant_len,

@@ -363,7 +363,9 @@ int main(void) {
         for (int key = 0; key < (int)NOTE_COUNT; ++key) {
             float y = key * semitone_height;
             bool active = notes_monitor[key].playing || notes_replay[key].playing;
-            int semi = active ? (notes_monitor[key].playing ? notes_monitor[key].semitone : notes_replay[key].semitone)
+            int semi = active ? (notes_monitor[key].playing 
+                                  ? notes_monitor[key].semitone 
+                                  : notes_replay[key].semitone)
                               : (key + shift);
 
             const char *label = TextFormat("%s - %s", KEY_NAMES[key], semitone_to_note_name(semi));
